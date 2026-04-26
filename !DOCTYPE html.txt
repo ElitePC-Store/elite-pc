@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite PC | متجر الجيمنج</title>
+    <style>
+        :root {
+            --main-red: #ff0000;
+            --bg-dark: #0a0a0a;
+            --card-bg: #151515;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* القائمة العلوية */
+        header {
+            background-color: rgba(0,0,0,0.9);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--main-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { color: var(--main-red); font-weight: bold; font-size: 24px; text-decoration: none; }
+
+        nav a { color: white; text-decoration: none; margin-right: 20px; font-size: 14px; transition: 0.3s; }
+        nav a:hover { color: var(--main-red); }
+
+        /* قسم الترحيب */
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+        }
+
+        .hero h1 { font-size: 60px; margin: 0; }
+        .hero h1 span { color: var(--main-red); }
+
+        /* قسم الفئات والمنتجات */
+        .section-title { text-align: center; margin: 50px 0; font-size: 30px; }
+        .section-title span { color: var(--main-red); border-bottom: 2px solid var(--main-red); }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+
+        .card {
+            background: var(--card-bg);
+            width: 280px;
+            margin: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.4s;
+        }
+
+        .card:hover { border-color: var(--main-red); transform: scale(1.05); }
+
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+
+        .card-info { padding: 20px; text-align: center; }
+        .card-info h3 { margin: 10px 0; }
+        .price { color: var(--main-red); font-weight: bold; font-size: 18px; }
+
+        .btn-buy {
+            display: inline-block;
+            background: var(--main-red);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* نموذج الطلب */
+        .order-form {
+            max-width: 500px;
+            margin: 50px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid var(--main-red);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .whatsapp-btn {
+            background-color: #25d366;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#" class="logo">ELITE PC</a>
+    <nav>
+        <a href="#products">المنتجات</a>
+        <a href="#order">اطلب الآن</a>
+        <a href="#">كيبوردات</a>
+        <a href="#">ماوسات</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>أداء بلا <span>حدود</span></h1>
+    <p>متجرك الأول لأقوى إكسسوارات الكمبيوتر والجيمنج</p>
+</section>
+
+<h2 class="section-title">اختر <span>فئتك</span></h2>
+
+<div class="container" id="products">
+    <div class="card">
+        <img src="https://m.media-amazon.com/images/I/618m4h8n6FL._AC_SL1500_.jpg" alt="Mouse">
+        <div class="card-info">
+            <h3>ماوس جيمنج برو</h3>
+            <p class="price">150 ₪</p>
+            <a href="#order" class="btn-buy">شراء الآن</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="https://m.media-amazon.com/images/I/71YyPZ-oN2L._AC_SL1500_.jpg" alt="Keyboard">
+        <div class="card-info">
+            <h3>كيبورد ميكانيكي</h3>
+            <p class="price">300 ₪</p>
+            <a href="#order" class="btn-buy">شراء الآن</a>
+        </div>
+    </div>
+</div>
+
+<div class="order-form" id="order">
+    <h2 style="text-align:center; color:var(--main-red)">طلب سريع</h2>
+    <input type="text" id="name" placeholder="الاسم الكامل" required>
+    <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+    
+    <select id="region" required>
+        <option value="">-- اختر المنطقة --</option>
+        <option value="الداخل (48)">الداخل (48)</option>
+        <option value="القدس">القدس</option>
+        <option value="الضفة الغربية">الضفة الغربية</option>
+    </select>
+    
+    <input type="text" id="address" placeholder="المدينة / القرية بالتفصيل" required>
+    <textarea id="order_details" placeholder="اكتب المنتجات التي تريدها"></textarea>
+    
+    <button class="whatsapp-btn" onclick="sendToWhatsApp()">إرسال الطلب عبر واتساب</button>
+</div>
+
+<script>
+    function sendToWhatsApp() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const region = document.getElementById('region').value;
+        const address = document.getElementById('address').value;
+        const details = document.getElementById('order_details').value;
+
+        const message = `طلب جديد من المتجر:%0A` +
+                        `*الاسم:* ${name}%0A` +
+                        `*الهاتف:* ${phone}%0A` +
+                        `*المنطقة:* ${region}%0A` +
+                        `*العنوان:* ${address}%0A` +
+                        `*الطلب:* ${details}`;
+
+        const myNumber = "972525995654"; // ضع رقمك هنا بدون الصفر الأول
+        window.open(`https://wa.me/${myNumber}?text=${message}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
