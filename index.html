@@ -10,21 +10,21 @@
         :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; --wa-green: #25d366; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; overflow-x: hidden; }
         
-        /* شريط التوصيل */
-        .delivery-bar { background: var(--main-red); color: white; padding: 8px 0; font-weight: bold; overflow: hidden; white-space: nowrap; }
+        /* شريط التوصيل اللي بدك اياه */
+        .delivery-bar { background: var(--main-red); color: white; padding: 8px 0; font-size: 14px; font-weight: bold; overflow: hidden; white-space: nowrap; }
         .marquee { display: inline-block; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        header { background: #111; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-red); }
-        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); background: #222; }
+        header { background: rgba(10,10,10,0.95); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--main-red); }
+        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); object-fit: cover; }
         
-        /* الهيرو مع صورة ثابتة قوية */
+        /* التصميم الأصلي اللي كان عندك */
         .hero { 
-            height: 45vh; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://wallpaperaccess.com/full/1253965.jpg');
+            height: 45vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1547082299-de196ea013d6?q=80&w=2070');
             background-size: cover; background-position: center; border-bottom: 2px solid #222;
         }
+        .hero-logo { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; box-shadow: 0 0 15px var(--main-red); }
 
         .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
         .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
@@ -32,40 +32,41 @@
         .tk-btn { background: #000; border: 1px solid #fff; }
 
         .category-section { padding: 30px 5%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .product-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #222; text-align: center; }
-        .product-card img { width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 8px; }
-        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 8000; padding: 20px; }
+        /* لوحة التحكم اللي بدك اياها بالضبط */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 8000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="delivery-bar">
-    <div class="marquee">🚀 توصيل لجميع المناطق | 𝐁𝐌 𝐇𝐈𝐆𝐇𝐒𝐓𝐀𝐅𝐅 🚀 أداء بلا حدود 🚀</div>
+    <div class="marquee">🚀 يوجد توصيل لجميع مناطق الضفة والقدس والداخل 🚀 أداء بلا حدود مع 𝐁𝐌 𝐇𝐈𝐆𝐇𝐒𝐓𝐀𝐅𝐅 🚀</div>
 </div>
 
 <header>
     <div style="display:flex; align-items:center; gap:10px;">
         <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-nav" class="logo-img">
-        <b id="name-nav">BM HIGHSTAFF</b>
+        <b id="name-nav">ELITE PC</b>
     </div>
     <nav>
-        <button onclick="openAdmin()" style="background:none; color:grey; border:none; cursor:pointer;">[ إدارة ]</button>
-        <button onclick="showCart()" style="background:var(--main-red); padding:8px 15px; border:none; border-radius:5px; color:white; font-weight:bold; cursor:pointer;">السلة (<span id="count">0</span>)</button>
+        <button onclick="openAdmin()" style="background:none; color:grey; border:none; cursor:pointer;">[ الإدارة ]</button>
+        <button onclick="showCart()" style="background:var(--main-red); padding:8px 15px; border:none; border-radius:5px; color:white; font-weight:bold; cursor:pointer; margin-right:10px;">السلة (<span id="count">0</span>)</button>
     </nav>
 </header>
 
 <div class="hero">
-    <h1 style="margin:0; font-size: 3rem; text-shadow: 0 0 20px var(--main-red);">𝐁𝐌 𝐇𝐈𝐆𝐇𝐒𝐓𝐀𝐅𝐅</h1>
-    <p style="color:#00f2ff; letter-spacing: 3px;">ELITE PC STORE</p>
+    <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-hero" class="hero-logo">
+    <h1 id="name-hero">ELITE PC</h1>
+    <p style="color:#aaa;">Elite PC Gaming Solutions</p>
 </div>
 
-<div id="shop-data" class="category-section">
-    </div>
+<div id="shop-data" class="category-section"></div>
 
 <div class="social-float">
     <a href="https://wa.me/972525995654" class="float-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -74,56 +75,49 @@
 
 <div id="admin-modal" class="modal">
     <div class="modal-content">
-        <h3>إدارة المتجر ⚙️</h3>
+        <h3>إدارة المتجر ⚙️ (كود -89)</h3>
         <input type="text" id="pn" placeholder="اسم المنتج">
         <input type="number" id="pp" placeholder="السعر">
         <input type="text" id="pi" placeholder="رابط الصورة">
         <select id="pc">
-            <option value="KEY">كيبوردات</option>
-            <option value="MOUSE">ماوسات</option>
+            <option value="KEYBOARDS">كيبوردات</option>
+            <option value="MICE">ماوسات</option>
+            <option value="MOUSEPADS">ماوس باد</option>
         </select>
-        <button onclick="saveProduct()" class="buy-btn">إضافة منتج</button>
-        <button onclick="closeModals()" style="background:none; color:white; width:100%; margin-top:10px; border:none;">إغلاق</button>
+        <button onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:20px;">إغلاق</button>
     </div>
 </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('elite_final')) || [];
+    let products = JSON.parse(localStorage.getItem('elite_v10')) || [];
     let cart = [];
 
     function render() {
-        let h = '<div class="grid">';
-        if(products.length === 0) {
-            h = '<p style="text-align:center;">ادخل على "إدارة" وأضف أول منتج يا بطل!</p>';
-        } else {
-            products.forEach(p => {
-                h += `<div class="product-card">
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'">
-                    <h3>${p.name}</h3>
-                    <b style="color:var(--main-red)">${p.price} ₪</b>
-                    <button class="buy-btn" onclick="addToCart()">إضافة للسلة</button>
-                </div>`;
-            });
-            h += '</div>';
-        }
+        const cats = [{id:'KEYBOARDS', n:'كيبوردات'}, {id:'MICE', n:'ماوسات'}, {id:'MOUSEPADS', n:'ماوس باد'}];
+        let h = '';
+        cats.forEach(c => {
+            const items = products.filter(p => p.cat === c.id);
+            h += `<div class="category-title">${c.n}</div><div class="grid">`;
+            h += items.length ? items.map(p => `<div class="product-card"><img src="${p.img}" style="width:100%; height:150px; object-fit:contain;"><h3>${p.name}</h3><b>${p.price} ₪</b><button class="buy-btn" onclick="addToCart()">إضافة للسلة</button></div>`).join('') : '<p>لا يوجد منتجات.</p>';
+            h += `</div>`;
+        });
         document.getElementById('shop-data').innerHTML = h;
     }
 
-    function openAdmin() { if(prompt("كود -89:") === "-89") document.getElementById('admin-modal').style.display='block'; }
-    function closeModals() { document.getElementById('admin-modal').style.display='none'; }
+    function openAdmin() { if(prompt("كود الإدارة:") === "-89") document.getElementById('admin-modal').style.display='block'; }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
 
     function saveProduct() {
         const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
-        if(!n || !p) return alert("دخل البيانات!");
-        products.push({name:n, price:p, img:i, cat:c});
-        localStorage.setItem('elite_final', JSON.stringify(products));
+        products.push({name:n, price:parseInt(p), img:i, cat:c});
+        localStorage.setItem('elite_v10', JSON.stringify(products));
         render(); closeModals();
     }
 
-    function addToCart() { cart.push(1); document.getElementById('count').innerText = cart.length; alert("تمت الإضافة!"); }
+    function addToCart() { cart.push(1); document.getElementById('count').innerText = cart.length; }
 
     render();
 </script>
-
 </body>
 </html>
