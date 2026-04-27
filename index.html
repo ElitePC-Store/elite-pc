@@ -116,4 +116,80 @@
                 <h3>${p.name}</h3>
                 <p style="font-size:12px; color:#aaa;">${p.desc}</p>
                 <div class="product-price">${p.price} ₪</div>
-                <button onclick="addToCart('${p.name}', ${p.price})" class="btn-action" style="padding:10px; font-size:14
+                <button onclick="addToCart('${p.name}', ${p.price})" class="btn-action" style="padding:10px; font-size:14px; background:var(--main-red)">إضافة للسلة</button>
+            </div>
+        `).join('');
+    }
+
+    function addProduct() {
+        const name = document.getElementById('p-name').value;
+        const price = document.getElementById('p-price').value;
+        const img = document.getElementById('p-img').value;
+        const desc = document.getElementById('p-desc').value;
+        
+        if(!name || !price || !img) return alert("عبّي البيانات كاملة يا بطل!");
+
+        products.push({name, price: parseInt(price), img, desc});
+        localStorage.setItem('elite_products', JSON.stringify(products));
+        
+        // حفظ إعدادات المتجر
+        if(document.getElementById('edit-name').value) {
+            localStorage.setItem('store_name', document.getElementById('edit-name').value);
+        }
+        if(document.getElementById('edit-logo').value) {
+            localStorage.setItem('store_logo', document.getElementById('edit-logo').value);
+        }
+
+        alert("تم التحديث بنجاح!");
+        location.reload();
+    }
+
+    function deleteProduct(index) {
+        if(confirm("بدك تمسح هذا المنتج؟")) {
+            products.splice(index, 1);
+            localStorage.setItem('elite_products', JSON.stringify(products));
+            renderProducts();
+        }
+    }
+
+    function toggleDelete() {
+        canDelete = !canDelete;
+        renderProducts();
+    }
+
+    function addToCart(n, p) {
+        cart.push({n, p});
+        document.getElementById('cart-count').innerText = cart.length;
+        alert("انضاف للسلة! كمل تسوق يا وحش.");
+    }
+
+    function showCart() {
+        document.getElementById('cart-modal').style.display = 'block';
+        const list = document.getElementById('cart-items-list');
+        list.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; margin:5px 0;"><span>${i.n}</span><span>${i.p} ₪</span></div>`).join('');
+        updateFinalTotal();
+    }
+
+    function updateFinalTotal() {
+        let itemsSum = cart.reduce((a, b) => a + b.p, 0);
+        let ship = parseInt(document.getElementById('shipping-zone').value);
+        document.getElementById('final-total').innerText = itemsSum + ship;
+    }
+
+    function sendOrder() {
+        const name = document.getElementById('customer-name').value;
+        const total = document.getElementById('final-total').innerText;
+        if(!name || cart.length === 0) return alert("اكتب اسمك وعبّي السلة!");
+        
+        const items = cart.map(i => i.n).join(' + ');
+        const msg = `طلب جديد من متجر Elite PC ♔%0Aالاسم: ${name}%0Aالطلبية: ${items}%0Aالمجموع النهائي: ${total} ₪`;
+        window.open(`https://wa.me/972525995654?text=${msg}`);
+    }
+
+    function openAdmin() { if(prompt("باسورد الإدارة:") === "1234") document.getElementById('admin-modal').style.display = 'block'; }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+
+    init();
+</script>
+</body>
+</html>
