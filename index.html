@@ -3,128 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite PC Store</title>
+    <title>Elite PC Store | متجر النخبة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #ff0000; --bg-color: #0a0a0a; }
-        body { background: var(--bg-color); color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-color); padding-bottom: 10px; }
-        .admin-btn { background: none; border: 1px solid #333; color: #555; cursor: pointer; font-size: 12px; }
+        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #151515; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; padding-bottom: 100px; }
         
-        /* تصميم المنتجات */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: #151515; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #222; transition: 0.3s; }
-        .card:hover { border-color: var(--main-color); }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
-        .price { color: var(--main-color); font-weight: bold; font-size: 20px; }
-        
-        /* السلة والطلب */
-        .cart-box { background: #111; padding: 20px; border-radius: 10px; margin-top: 40px; border-top: 3px solid var(--main-color); }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
-        .order-btn { background: var(--main-color); color: #fff; border: none; width: 100%; padding: 15px; font-size: 18px; cursor: pointer; border-radius: 5px; }
+        /* الهيدر */
+        header { background: linear-gradient(to bottom, #1a1a1a, #000); padding: 30px; text-align: center; border-bottom: 3px solid var(--main-red); position: relative; }
+        .delivery-tag { position: absolute; left: 10px; top: 10px; background: var(--main-red); padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        .store-title { font-size: 2.8rem; margin: 10px 0; color: #fff; text-shadow: 0 0 15px var(--main-red); }
 
-        /* لوحة التحكم المخفية */
-        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 20px; box-sizing: border-box; }
-        .close-admin { background: red; color: white; padding: 10px; cursor: pointer; float: left; }
+        /* المنتجات */
+        .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid #333; transition: 0.3s; }
+        .card:hover { border-color: var(--main-red); transform: translateY(-5px); }
+        .card img { width: 100%; height: 180px; object-fit: contain; border-radius: 10px; }
+        .card h3 { margin: 15px 0 5px; }
+        .card .price { color: var(--main-red); font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+
+        /* السلة والطلب */
+        .order-section { background: #111; margin: 20px; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 8px; font-family: 'Cairo'; }
+        .btn-send { background: #25d366; color: white; border: none; width: 100%; padding: 15px; font-size: 1.2rem; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        
+        /* لوحة التحكم */
+        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; padding: 20px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Elite PC Store ♔</h1>
-        <button class="admin-btn" onclick="openAdmin()">لوحة التحكم</button>
-    </div>
+    <header>
+        <div class="delivery-tag">🚚 توصيل للقدس، الداخل والضفة</div>
+        <h1 class="store-title">ELITE PC STORE ♔</h1>
+        <button onclick="openAdmin()" style="background:none; border:none; color:#444; cursor:pointer; font-size:12px;">[ لوحة التحكم ]</button>
+    </header>
 
-    <div id="products-container" class="product-grid">
+    <div class="container" id="products-grid">
         </div>
 
-    <div class="cart-box">
-        <h2>🛒 سلة المشتريات</h2>
-        <div id="cart-items">السلة فارغة حالياً</div>
-        <p>المجموع (بدون توصيل): <span id="subtotal">0</span> NIS</p>
+    <div class="order-section">
+        <h2 style="color: var(--main-red); text-align: center;">🛒 إتمام الطلب</h2>
+        <div id="cart-summary" style="margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 10px;">السلة فارغة</div>
         
         <label>منطقة التوصيل:</label>
-        <select id="shipping" onchange="updateTotal()">
-            <option value="0">اختر منطقتك...</option>
+        <select id="delivery-zone" onchange="calcTotal()">
+            <option value="0">اختر المنطقة...</option>
             <option value="50">القدس (+50 NIS)</option>
             <option value="70">الداخل (+70 NIS)</option>
             <option value="20">الضفة (+20 NIS)</option>
         </select>
 
-        <h3>المجموع النهائي: <span id="total-price" style="color:red">0</span> NIS</h3>
-        <hr>
-        <input type="text" id="user-name" placeholder="الاسم الكامل">
-        <input type="text" id="user-phone" placeholder="رقم الهاتف">
-        <button class="order-btn" onclick="checkout()">إرسال الطلب عبر الواتساب</button>
+        <h3 style="text-align: center;">المجموع النهائي: <span id="total-cost" style="color:var(--main-red)">0</span> NIS</h3>
+        
+        <input type="text" id="cust-name" placeholder="الاسم الكامل">
+        <input type="text" id="cust-phone" placeholder="رقم الهاتف">
+        <button class="btn-send" onclick="sendToWhatsApp()">إرسال الطلب عبر الواتساب ✅</button>
     </div>
 
     <div id="admin-panel">
-        <span class="close-admin" onclick="closeAdmin()">إغلاق X</span>
-        <h2>لوحة تحكم Abo al abd</h2>
-        <p>أهلاً بك. يمكنك إضافة المنتجات من هنا (يتم الحفظ في الجدول تلقائياً):</p>
-        <iframe src="https://docs.google.com/spreadsheets/d/1GlfPWOymEKjJBCFyXuNd8oO579ShvA0leRuLSlswKR0/edit" style="width: 100%; height: 80%; border: none;"></iframe>
+        <button onclick="document.getElementById('admin-panel').style.display='none'" style="background:red; color:white; padding:10px; border:none; margin-bottom:10px; cursor:pointer;">إغلاق X</button>
+        <iframe src="https://docs.google.com/spreadsheets/d/1GIfPWOymEKjJBCFyXuNd8oO579ShvA0leRuLSlswKR0/edit" style="width: 100%; height: 90%; border: none;"></iframe>
     </div>
 
 <script>
     let cart = [];
-    let subtotal = 0;
+    let itemsTotal = 0;
 
-    // جلب المنتجات من الإكسل
+    // سحب البيانات من Google Sheets
     const sheetId = '1GlfPWOymEKjJBCFyXuNd8oO579ShvA0leRuLSlswKR0';
-    const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
 
-    function loadProducts() {
-        fetch(base).then(res => res.text()).then(data => {
-            const json = JSON.parse(data.substr(47).slice(0, -2));
-            const rows = json.table.rows;
-            let html = '';
-            rows.forEach((row, i) => {
-                if (i === 0) return;
-                const name = row.c[0] ? row.c[0].v : 'منتج';
-                const price = row.c[1] ? row.c[1].v : 0;
-                const img = row.c[2] ? row.c[2].v : '';
-                html += `<div class="card">
-                    <img src="${img}">
-                    <h3>${name}</h3>
-                    <p class="price">${price} NIS</p>
-                    <button class="order-btn" style="padding:5px; font-size:14px" onclick="addToCart('${name}', ${price})">إضافة للسلة</button>
-                </div>`;
-            });
-            document.getElementById('products-container').innerHTML = html;
+    fetch(url).then(res => res.text()).then(data => {
+        const json = JSON.parse(data.substr(47).slice(0, -2));
+        const rows = json.table.rows;
+        let html = '';
+        rows.forEach((row, i) => {
+            if (i === 0) return;
+            const name = row.c[0] ? row.c[0].v : '';
+            const price = row.c[1] ? row.c[1].v : 0;
+            const img = row.c[2] ? row.c[2].v : '';
+            html += `<div class="card">
+                <img src="${img}">
+                <h3>${name}</h3>
+                <div class="price">${price} NIS</div>
+                <button class="btn-send" style="background:var(--main-red); padding:8px;" onclick="addToCart('${name}', ${price})">إضافة للسلة</button>
+            </div>`;
         });
-    }
+        document.getElementById('products-grid').innerHTML = html;
+    });
 
     function addToCart(n, p) {
-        cart.push({n, p});
-        subtotal += p;
-        document.getElementById('cart-items').innerHTML = cart.map(i => `<div>${i.n} - ${i.p} NIS</div>`).join('');
-        document.getElementById('subtotal').innerText = subtotal;
-        updateTotal();
+        cart.push(n);
+        itemsTotal += p;
+        document.getElementById('cart-summary').innerText = "المنتجات المختارة: " + cart.join(' - ');
+        calcTotal();
     }
 
-    function updateTotal() {
-        let ship = parseInt(document.getElementById('shipping').value);
-        document.getElementById('total-price').innerText = subtotal + ship;
+    function calcTotal() {
+        let ship = parseInt(document.getElementById('delivery-zone').value);
+        document.getElementById('total-cost').innerText = itemsTotal + ship;
+    }
+
+    function sendToWhatsApp() {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const total = document.getElementById('total-cost').innerText;
+        const zone = document.getElementById('delivery-zone').options[document.getElementById('delivery-zone').selectedIndex].text;
+        
+        if(!name || !phone || itemsTotal == 0) return alert("عبّي السلة واسمك يا وحش!");
+
+        const msg = `طلب جديد من Elite PC Store:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالمنطقة: ${zone}%0Aالمنتجات: ${cart.join(', ')}%0Aالمجموع: ${total} NIS`;
+        window.open(`https://wa.me/972525995654?text=${msg}`, '_blank');
     }
 
     function openAdmin() {
-        let pass = prompt("أدخل كلمة المرور:");
-        if(pass === "1234") { // غير الباسورد من هون
-            document.getElementById('admin-panel').style.display = 'block';
-        } else {
-            alert("خطأ في كلمة المرور!");
-        }
+        if(prompt("كلمة السر:") === "1234") document.getElementById('admin-panel').style.display='block';
     }
-
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-
-    function checkout() {
-        const name = document.getElementById('user-name').value;
-        const total = document.getElementById('total-price').innerText;
-        if(!name) return alert("اكتب اسمك يا وحش");
-        alert("شكراً " + name + "! تم استلام طلبك بمجموع " + total + " NIS. (سيتم توجيهك للواتساب قريباً)");
-    }
-
-    loadProducts();
 </script>
 </body>
 </html>
