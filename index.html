@@ -16,10 +16,10 @@
         .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
-        /* ستايل زر الحذف X */
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #1a1a1a; margin-bottom: 8px; border-radius: 5px; }
-        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 20px; padding: 0 10px; }
-        .remove-x:hover { color: white; }
+        /* زر الحذف X في السلة */
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1a1a1a; margin-bottom: 10px; border-radius: 8px; border-right: 4px solid var(--main-red); }
+        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 22px; padding: 0 5px; transition: 0.3s; }
+        .remove-x:hover { color: white; transform: scale(1.2); }
 
         .category-section { padding: 30px 5%; }
         .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
@@ -37,8 +37,6 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
-
-        #success-page { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 5000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     </style>
 </head>
 <body>
@@ -70,9 +68,9 @@
 
 <div id="cart-modal" class="modal">
     <div class="modal-content">
-        <h3 style="text-align:center;">إتمام الطلب 🛒</h3>
-        <div id="cart-summary" style="margin-bottom:15px;"></div>
-        
+        <h3 style="text-align:center;">سلة المشتريات 🛒</h3>
+        <div id="cart-summary"></div>
+        <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <select id="area" onchange="updateTotal()">
             <option value="0">اختر منطقة التوصيل...</option>
             <option value="70">الداخل (+70 ₪)</option>
@@ -89,7 +87,7 @@
 
 <div id="admin-modal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
-        <h3>لوحة إدارة المتجر ⚙️ (كود -89)</h3>
+        <h3>إدارة المتجر (كود -89)</h3>
         <input type="text" id="pn" placeholder="اسم المنتج">
         <input type="number" id="pp" placeholder="السعر">
         <input type="text" id="pi" placeholder="رابط الصورة">
@@ -126,12 +124,12 @@
     function removeFromCart(index) {
         cart.splice(index, 1);
         document.getElementById('count').innerText = cart.length;
-        showCart(); // تحديث العرض
+        showCart();
     }
 
     function showCart() {
         document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-summary').innerHTML = cart.map((item, index) => `
+        document.getElementById('cart-summary').innerHTML = cart.length === 0 ? '<p style="text-align:center; color:grey;">السلة فارغة</p>' : cart.map((item, index) => `
             <div class="cart-item">
                 <span>${item.n} - ${item.p} ₪</span>
                 <span class="remove-x" onclick="removeFromCart(${index})">×</span>
@@ -150,6 +148,7 @@
 
     function saveProduct() {
         const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
+        if(!n || !p) return alert("عبّي البيانات!");
         products.push({name:n, price:parseInt(p), img:i, cat:c});
         localStorage.setItem('elite_v7', JSON.stringify(products));
         render(); closeModals();
