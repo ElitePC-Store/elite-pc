@@ -10,182 +10,203 @@
         :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; }
         
-        /* تصميم اللوجو والهيدر الجديد */
         header { background: rgba(10,10,10,0.95); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--main-red); }
-        .logo-nav { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); object-fit: cover; }
-        .brand-name { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; color: white; }
+        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); object-fit: cover; }
+        
+        .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
-        /* منطقة الهيرو مع اللوجو الكبير */
-        .hero { height: 55vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .hero-logo { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--main-red); margin-bottom: 20px; box-shadow: 0 0 20px var(--main-red); }
-        
-        .category-section { padding: 40px 5%; }
-        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 30px; font-size: 26px; font-weight: bold; color: var(--main-red); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; margin-bottom: 50px; }
-        
-        .product-card { background: var(--card-bg); border-radius: 15px; padding: 20px; border: 1px solid #222; text-align: center; transition: 0.3s; }
-        .product-card:hover { border-color: var(--main-red); transform: translateY(-5px); }
-        .product-card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
-        
-        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
-        
-        /* نظام الإدارة والسلة */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; padding: 20px; overflow-y: auto; }
-        .modal-content { max-width: 480px; margin: 40px auto; background: #151515; padding: 30px; border-radius: 20px; border: 2px solid var(--main-red); }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
-        
-        .admin-controls { display: flex; gap: 10px; margin-bottom: 20px; }
-        .admin-controls button { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; }
+        .category-section { padding: 30px 5%; }
+        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .product-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #222; text-align: center; }
+        .product-card img { width: 100%; height: 160px; object-fit: contain; }
 
-        /* صفحة النجاح الكاملة */
-        #success-page { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .success-box { background: #111; padding: 40px; border-radius: 25px; border: 2px solid #25d366; max-width: 500px; }
+        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
+        .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
+
+        /* Success Page Full Screen */
+        #success-page { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 5000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .success-banner { background: var(--main-red); width: 100%; padding: 40px 0; margin-bottom: 30px; position: relative; }
+        .success-check { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: #25d366; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; border: 5px solid #0a0a0a; }
+
+        /* Orders Table in Admin */
+        .orders-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        .orders-table th, .orders-table td { border: 1px solid #333; padding: 8px; text-align: right; }
+        .orders-table th { background: #222; color: var(--main-red); }
     </style>
 </head>
 <body>
 
-    <div id="app-interface">
-        <header>
-            <div style="display:flex; align-items:center; gap:15px;">
-                <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="logo-nav">
-                <span class="brand-name">ELITE PC</span>
+<div id="main-site">
+    <header>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="logo-img">
+            <b>ELITE PC</b>
+        </div>
+        <nav>
+            <button onclick="openAdmin()" style="background:none; color:grey; border:none; cursor:pointer;">[ لوحة التحكم ]</button>
+            <button onclick="showCart()" style="background:var(--main-red); padding:8px 15px; border:none; border-radius:5px; color:white; font-weight:bold; cursor:pointer;">السلة (<span id="count">0</span>)</button>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="hero-logo">
+        <h1 style="margin:0;">ELITE PC STORE</h1>
+    </div>
+
+    <div id="shop-data" class="category-section"></div>
+</div>
+
+<div id="success-page">
+    <div class="success-banner">
+        <div class="success-check"><i class="fas fa-check"></i></div>
+        <h1 style="margin:0;">شكراً لك. تم استلام طلبك.</h1>
+    </div>
+    <div style="max-width:600px; width:90%; background:#111; padding:20px; border-radius:10px; border:1px solid #222;">
+        <h3 style="border-bottom:1px solid #333; padding-bottom:10px;">تفاصيل الطلب</h3>
+        <p id="order-info" style="color:#aaa;"></p>
+        <div id="order-items-final" style="text-align:right; margin:15px 0;"></div>
+        <button onclick="location.reload()" class="buy-btn" style="width:150px;">إغلاق</button>
+    </div>
+</div>
+
+<div id="admin-modal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <h3>لوحة إدارة المتجر ⚙️</h3>
+        <div style="display:flex; gap:10px;">
+            <button onclick="handleEdit()" style="flex:1; background:orange; border:none; padding:10px; border-radius:5px; color:black; font-weight:bold;">تعديل بالاسم</button>
+            <button onclick="handleDelete()" style="flex:1; background:red; border:none; padding:10px; border-radius:5px; color:white; font-weight:bold;">حذف بالاسم</button>
+        </div>
+        <input type="text" id="pn" placeholder="اسم المنتج">
+        <input type="number" id="pp" placeholder="السعر">
+        <input type="text" id="pi" placeholder="رابط الصورة">
+        <select id="pc"><option value="KEYBOARDS">كيبوردات</option><option value="MICE">ماوسات</option><option value="MOUSEPADS">ماوس باد</option></select>
+        <button id="save-btn" onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
+        
+        <h4 style="margin-top:30px; color:var(--main-red); border-bottom:1px solid #333;">سجل الطلبات الواردة 📥</h4>
+        <div style="overflow-x:auto;">
+            <table class="orders-table">
+                <thead><tr><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المنتجات</th><th>المجموع</th></tr></thead>
+                <tbody id="orders-list"></tbody>
+            </table>
+        </div>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:20px;">إغلاق</button>
+    </div>
+</div>
+
+<div id="cart-modal" class="modal">
+    <div class="modal-content">
+        <h3 style="text-align:center;">إتمام الطلب 🛒</h3>
+        <div id="cart-summary" style="background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border-right:4px solid var(--main-red);">
             </div>
-            <nav>
-                <button onclick="openAdmin()" style="background:none; color:#666; border:1px solid #333; padding:6px 12px; border-radius:6px; cursor:pointer;">⚙️ الإدارة</button>
-                <button onclick="openCart()" style="background:var(--main-red); color:white; border:none; padding:8px 18px; border-radius:8px; cursor:pointer; margin-right:10px; font-weight:bold;">السلة (<span id="cart-count">0</span>)</button>
-            </nav>
-        </header>
-
-        <div class="hero">
-            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="hero-logo">
-            <h1 style="font-size: 3rem; margin: 0;">أداء بلا حدود</h1>
-            <p style="font-size: 1.2rem; color: #aaa;">النخبة تختار الأفضل دائماً</p>
-        </div>
-
-        <div id="shop-container" class="category-section"></div>
+        <select id="area" onchange="updateTotal()">
+            <option value="0">اختر منطقة التوصيل...</option>
+            <option value="70">الداخل (+70 ₪)</option>
+            <option value="50">القدس (+50 ₪)</option>
+            <option value="20">الضفة (+20 ₪)</option>
+        </select>
+        <input type="text" id="cn" placeholder="اسمك الكامل">
+        <input type="text" id="ct" placeholder="رقم الهاتف">
+        <h2 style="text-align:center;">المجموع: <span id="total-val">0</span> ₪</h2>
+        <button onclick="submitOrder()" class="buy-btn" style="background:#25d366;">تأكيد الطلب نهائياً</button>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:10px;">رجوع</button>
     </div>
-
-    <div id="success-page" style="display:none;">
-        <div class="success-box">
-            <i class="fas fa-check-circle" style="font-size: 70px; color: #25d366; margin-bottom: 20px;"></i>
-            <h1 style="color: white;">شكراً لك! تم استلام طلبك بنجاح</h1>
-            <p id="order-details" style="color: #aaa; line-height: 1.6;"></p>
-            <button onclick="location.reload()" class="buy-btn" style="width: 200px; margin-top: 20px;">العودة للرئيسية</button>
-        </div>
-    </div>
-
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align:center; margin-bottom:20px;">إدارة المتجر 🛠️</h2>
-            <div class="admin-controls">
-                <button onclick="startEdit()" style="background: #e67e22;"><i class="fas fa-edit"></i> تعديل</button>
-                <button onclick="startDelete()" style="background: #c0392b;"><i class="fas fa-trash"></i> حذف</button>
-            </div>
-            <hr style="border:0.5px solid #333; margin: 20px 0;">
-            <input type="text" id="in-name" placeholder="اسم المنتج">
-            <input type="number" id="in-price" placeholder="السعر بالـ ₪">
-            <input type="text" id="in-img" placeholder="رابط صورة المنتج">
-            <select id="in-cat">
-                <option value="KEYBOARDS">كيبوردات</option>
-                <option value="MICE">ماوسات</option>
-                <option value="MOUSEPADS">ماوس باد</option>
-            </select>
-            <button id="main-admin-btn" onclick="processProduct()" class="buy-btn">حفظ المنتج</button>
-            <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:15px; cursor:pointer;">إغلاق</button>
-        </div>
-    </div>
-
-    <div id="cart-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align:center;">تفاصيل طلبك 🛒</h2>
-            <div id="cart-items-box" style="margin: 20px 0; border-bottom: 1px solid #333; padding-bottom: 10px;"></div>
-            <select id="area-select" onchange="calcTotal()">
-                <option value="0">اختر منطقة التوصيل...</option>
-                <option value="70">الداخل (+70 ₪)</option>
-                <option value="50">القدس (+50 ₪)</option>
-                <option value="20">الضفة (+20 ₪)</option>
-            </select>
-            <input type="text" id="user-name" placeholder="اسمك الكامل">
-            <input type="text" id="user-tel" placeholder="رقم الهاتف">
-            <h2 style="text-align:center; color: var(--main-red);">المجموع: <span id="final-total">0</span> ₪</h2>
-            <button onclick="confirmOrder()" class="buy-btn" style="background: #25d366;">تأكيد وشراء ✅</button>
-            <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:15px; cursor:pointer;">رجوع</button>
-        </div>
-    </div>
+</div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v5')) || [];
+    let products = JSON.parse(localStorage.getItem('elite_v7')) || [];
+    let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
     let cart = [];
-    let activeEditIndex = -1;
+    let editIdx = -1;
     const cats = [{id:'KEYBOARDS', n:'كيبوردات'}, {id:'MICE', n:'ماوسات'}, {id:'MOUSEPADS', n:'ماوس باد'}];
 
-    function renderShop() {
-        let html = '';
+    function render() {
+        let h = '';
         cats.forEach(c => {
-            const items = db.filter(p => p.cat === c.id);
-            html += `<div class="category-title">${c.n}</div><div class="grid">`;
-            html += items.length ? items.map(p => `
+            const items = products.filter(p => p.cat === c.id);
+            h += `<div class="category-title">${c.n}</div><div class="grid">`;
+            h += items.length ? items.map(p => `
                 <div class="product-card">
                     <img src="${p.img}">
                     <h3>${p.name}</h3>
-                    <div style="color:var(--main-red); font-weight:bold; font-size:1.3rem;">${p.price} ₪</div>
+                    <div style="color:var(--main-red); font-weight:bold; margin-bottom:10px;">${p.price} ₪</div>
                     <button class="buy-btn" onclick="addToCart('${p.name}', ${p.price})">إضافة للسلة</button>
-                </div>`).join('') : '<p style="color:#444; padding:20px;">قريباً منتجات جديدة...</p>';
-            html += `</div>`;
+                </div>`).join('') : '<p style="color:#333;">لا يوجد منتجات.</p>';
+            h += `</div>`;
         });
-        document.getElementById('shop-container').innerHTML = html;
-    }
-
-    function openAdmin() { if(prompt("كود الإدارة:") === "-89") document.getElementById('admin-modal').style.display='block'; }
-    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); activeEditIndex = -1; document.getElementById('main-admin-btn').innerText="حفظ المنتج"; }
-
-    function processProduct() {
-        const n = document.getElementById('in-name').value, p = document.getElementById('in-price').value, img = document.getElementById('in-img').value, c = document.getElementById('in-cat').value;
-        if(!n || !p || !img) return alert("عبّي الخانات يا بطل!");
-
-        if(activeEditIndex > -1) { db[activeEditIndex] = {name:n, price:parseInt(p), img, cat:c}; }
-        else { db.push({name:n, price:parseInt(p), img, cat:c}); }
-
-        localStorage.setItem('elite_v5', JSON.stringify(db));
-        renderShop(); closeModals();
-    }
-
-    function startDelete() {
-        const target = prompt("اكتب اسم المنتج بدقة لحذفه:");
-        const idx = db.findIndex(p => p.name === target);
-        if(idx > -1 && confirm(`أكيد بدك تحذف ${target}؟`)) {
-            db.splice(idx, 1);
-            localStorage.setItem('elite_v5', JSON.stringify(db));
-            renderShop(); alert("تم الحذف بنجاح!");
-        } else { alert("المنتج غير موجود!"); }
-    }
-
-    function startEdit() {
-        const target = prompt("اكتب اسم المنتج لتعديله:");
-        const idx = db.findIndex(p => p.name === target);
-        if(idx > -1) {
-            const p = db[idx];
-            document.getElementById('in-name').value = p.name;
-            document.getElementById('in-price').value = p.price;
-            document.getElementById('in-img').value = p.img;
-            document.getElementById('in-cat').value = p.cat;
-            activeEditIndex = idx;
-            document.getElementById('main-admin-btn').innerText = "تحديث البيانات الآن";
-        } else { alert("المنتج غير موجود!"); }
-    }
-
-    function addToCart(n, p) { cart.push({n, p}); document.getElementById('cart-count').innerText = cart.length; }
-    function openCart() { 
-        document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-items-box').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span>${i.n}</span><span>${i.p} ₪</span></div>`).join('');
-        calcTotal();
-    }
-    function calcTotal() { const s = parseInt(document.getElementById('area-select').value); document.getElementById('final-total').innerText = cart.reduce((a, b) => a + b.p, 0) + s; }
-
-    function confirmOrder() {
-        const n = document.getElementById('user-name').value, t = document.getElementById('user-tel').value, a = document.getElementById('area-select').value;
-        if(!n || !t || a === "0") return alert("البيانات ناقصة!");
+        document.getElementById('shop-data').innerHTML = h;
         
-        document.getElementById('app-interface').style.display = 'none';
+        // تحديث سجل الطلبات في لوحة التحكم
+        document.getElementById('orders-list').innerHTML = orders.map(o => `
+            <tr><td>${o.name}</td><td>${o.phone}</td><td>${o.area}</td><td>${o.items}</td><td>${o.total} ₪</td></tr>
+        `).reverse().join('');
+    }
+
+    function openAdmin() { if(prompt("كود الدخول:") === "-89") document.getElementById('admin-modal').style.display='block'; }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); editIdx = -1; }
+
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
+        if(editIdx > -1) products[editIdx] = {name:n, price:parseInt(p), img:i, cat:c};
+        else products.push({name:n, price:parseInt(p), img:i, cat:c});
+        localStorage.setItem('elite_v7', JSON.stringify(products));
+        render(); closeModals();
+    }
+
+    function handleDelete() {
+        const t = prompt("اسم المنتج المراد حذفه:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) { products.splice(idx,1); localStorage.setItem('elite_v7', JSON.stringify(products)); render(); }
+    }
+
+    function handleEdit() {
+        const t = prompt("اسم المنتج لتعديله:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) {
+            const p = products[idx];
+            document.getElementById('pn').value=p.name; document.getElementById('pp').value=p.price; document.getElementById('pi').value=p.img; document.getElementById('pc').value=p.cat;
+            editIdx = idx; document.getElementById('save-btn').innerText="تحديث المنتج";
+        }
+    }
+
+    function addToCart(n, p) { cart.push({n, p}); document.getElementById('count').innerText = cart.length; }
+
+    function showCart() {
+        document.getElementById('cart-modal').style.display='block';
+        document.getElementById('cart-summary').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;"><span>${i.n}</span><b>${i.p} ₪</b></div>`).join('');
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const s = parseInt(document.getElementById('area').value);
+        document.getElementById('total-val').innerText = cart.reduce((a,b) => a+b.p, 0) + s;
+    }
+
+    function submitOrder() {
+        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
+        if(!n || !t || a === "0") return alert("عبّي بياناتك!");
+
+        const total = document.getElementById('total-val').innerText;
+        const itemsNames = cart.map(i => i.n).join(', ');
+        
+        // حفظ الطلب في السجل
+        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:itemsNames, total:total});
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+
+        // إظهار صفحة النجاح
+        document.getElementById('main-site').style.display = 'none';
         document.getElementById('cart-modal').style.display = 'none';
-        document.getElementById('success-
+        document.getElementById('success-page').style.display = 'flex';
+        document.getElementById('order-info').innerHTML = `<b>الاسم:</b> ${n}<br><b>الهاتف:</b> ${t}<br><b>المجموع:</b> ${total} ₪`;
+        document.getElementById('order-items-final').innerHTML = "<b>المنتجات:</b><br>" + cart.map(i => "- " + i.n).join('<br>');
+    }
+
+    render();
+</script>
+</body>
+</html>
