@@ -16,8 +16,10 @@
         .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1a1a1a; margin-bottom: 8px; border-radius: 8px; }
-        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 22px; }
+        /* ستايل حذف منتج من السلة X */
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1a1a1a; margin-bottom: 8px; border-radius: 8px; border-right: 4px solid var(--main-red); }
+        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 20px; padding-left: 10px; }
+        .remove-x:hover { color: white; }
 
         .category-section { padding: 30px 5%; }
         .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
@@ -28,13 +30,15 @@
         .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
         .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
-        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; }
+        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .wa-btn { background: var(--wa-green); }
+        .tk-btn { background: #000; border: 1px solid #fff; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
 
-        .orders-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; color: white; }
+        .orders-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
         .orders-table th, .orders-table td { border: 1px solid #333; padding: 8px; text-align: right; }
         .orders-table th { background: #222; color: var(--main-red); }
     </style>
@@ -62,8 +66,8 @@
 </div>
 
 <div class="social-float">
-    <a href="https://wa.me/972525995654" class="float-btn" style="background:#25d366;"><i class="fab fa-whatsapp"></i></a>
-    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn" style="background:#000; border:1px solid #fff;"><i class="fab fa-tiktok"></i></a>
+    <a href="https://wa.me/972525995654" class="float-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn tk-btn" target="_blank"><i class="fab fa-tiktok"></i></a>
 </div>
 
 <div id="cart-modal" class="modal">
@@ -120,13 +124,13 @@
         cats.forEach(c => {
             const items = products.filter(p => p.cat === c.id);
             h += `<div class="category-title">${c.n}</div><div class="grid">`;
-            h += items.map(p => `
+            h += items.length ? items.map(p => `
                 <div class="product-card">
                     <img src="${p.img}">
                     <h3>${p.name}</h3>
                     <div style="color:var(--main-red); font-weight:bold;">${p.price} ₪</div>
                     <button class="buy-btn" onclick="addToCart('${p.name}', ${p.price})">إضافة للسلة</button>
-                </div>`).join('');
+                </div>`).join('') : '<p style="color:#444;">لا يوجد منتجات.</p>';
             h += `</div>`;
         });
         document.getElementById('shop-data').innerHTML = h;
@@ -151,8 +155,9 @@
         document.getElementById('cart-modal').style.display='block';
         document.getElementById('cart-summary').innerHTML = cart.map((item, index) => `
             <div class="cart-item">
-                <span>${item.n} - ${item.p} ₪</span>
                 <span class="remove-x" onclick="removeFromCart(${index})">×</span>
+                <span>${item.n}</span>
+                <b>${item.p} ₪</b>
             </div>`).join('');
         updateTotal();
     }
@@ -172,7 +177,7 @@
     }
 
     function handleDelete() {
-        const t = prompt("اسم المنتج لحذفه:");
+        const t = prompt("اسم المنتج المراد حذفه:");
         const idx = products.findIndex(p => p.name === t);
         if(idx > -1) { products.splice(idx,1); localStorage.setItem('elite_v7', JSON.stringify(products)); render(); }
     }
@@ -194,10 +199,10 @@
         orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i => i.n).join(', '), total:total});
         localStorage.setItem('elite_orders', JSON.stringify(orders));
         alert("تم استلام طلبك بنجاح!");
-        location.reload();
+        cart = []; document.getElementById('count').innerText = 0; closeModals();
     }
 
-    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); editIdx = -1; }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); editIdx = -1; document.getElementById('save-btn').innerText="حفظ المنتج"; }
 
     render();
 </script>
