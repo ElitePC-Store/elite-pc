@@ -24,11 +24,15 @@
 
         .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        /* أزرار التواصل اللي طلبتها */
+        /* أزرار التواصل */
         .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
         .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .wa-btn { background: var(--wa-green); }
         .tk-btn { background: #000; border: 1px solid #fff; }
+
+        /* ستايل حذف منتج من السلة */
+        .remove-item { color: #ff4d4d; cursor: pointer; font-size: 18px; margin-left: 10px; }
+        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
@@ -181,9 +185,20 @@
 
     function addToCart(n, p) { cart.push({n, p}); document.getElementById('count').innerText = cart.length; }
 
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        document.getElementById('count').innerText = cart.length;
+        showCart(); // إعادة عرض السلة بعد الحذف
+    }
+
     function showCart() {
         document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-summary').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;"><span>${i.n}</span><b>${i.p} ₪</b></div>`).join('');
+        document.getElementById('cart-summary').innerHTML = cart.map((i, index) => `
+            <div class="cart-row">
+                <i class="fas fa-times-circle remove-item" onclick="removeFromCart(${index})"></i>
+                <span>${i.n}</span>
+                <b>${i.p} ₪</b>
+            </div>`).join('');
         updateTotal();
     }
 
@@ -194,7 +209,7 @@
 
     function submitOrder() {
         const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
-        if(!n || !t || a === "0") return alert("عبّي بياناتك!");
+        if(!n || !t || a === "0" || cart.length === 0) return alert("تأكد من بياناتك ومن وجود منتجات بالسلة!");
         const total = document.getElementById('total-val').innerText;
         orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i => i.n).join(', '), total:total});
         localStorage.setItem('elite_orders', JSON.stringify(orders));
