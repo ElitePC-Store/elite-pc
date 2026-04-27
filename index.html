@@ -16,10 +16,8 @@
         .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
-        /* زر الحذف X في السلة */
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1a1a1a; margin-bottom: 10px; border-radius: 8px; border-right: 4px solid var(--main-red); }
-        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 22px; padding: 0 5px; transition: 0.3s; }
-        .remove-x:hover { color: white; transform: scale(1.2); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1a1a1a; margin-bottom: 8px; border-radius: 8px; }
+        .remove-x { color: var(--main-red); cursor: pointer; font-weight: bold; font-size: 22px; }
 
         .category-section { padding: 30px 5%; }
         .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
@@ -30,13 +28,15 @@
         .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
         .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
-        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .wa-btn { background: var(--wa-green); }
-        .tk-btn { background: #000; border: 1px solid #fff; }
+        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
+
+        .orders-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; color: white; }
+        .orders-table th, .orders-table td { border: 1px solid #333; padding: 8px; text-align: right; }
+        .orders-table th { background: #222; color: var(--main-red); }
     </style>
 </head>
 <body>
@@ -62,15 +62,14 @@
 </div>
 
 <div class="social-float">
-    <a href="https://wa.me/972525995654" class="float-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn tk-btn" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://wa.me/972525995654" class="float-btn" style="background:#25d366;"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn" style="background:#000; border:1px solid #fff;"><i class="fab fa-tiktok"></i></a>
 </div>
 
 <div id="cart-modal" class="modal">
     <div class="modal-content">
-        <h3 style="text-align:center;">سلة المشتريات 🛒</h3>
+        <h3 style="text-align:center;">إتمام الطلب 🛒</h3>
         <div id="cart-summary"></div>
-        <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <select id="area" onchange="updateTotal()">
             <option value="0">اختر منطقة التوصيل...</option>
             <option value="70">الداخل (+70 ₪)</option>
@@ -87,19 +86,33 @@
 
 <div id="admin-modal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
-        <h3>إدارة المتجر (كود -89)</h3>
+        <h3>لوحة إدارة المتجر ⚙️</h3>
+        <div style="display:flex; gap:10px;">
+            <button onclick="handleEdit()" style="flex:1; background:orange; border:none; padding:10px; border-radius:5px; color:black; font-weight:bold;">تعديل بالاسم</button>
+            <button onclick="handleDelete()" style="flex:1; background:red; border:none; padding:10px; border-radius:5px; color:white; font-weight:bold;">حذف بالاسم</button>
+        </div>
         <input type="text" id="pn" placeholder="اسم المنتج">
         <input type="number" id="pp" placeholder="السعر">
         <input type="text" id="pi" placeholder="رابط الصورة">
         <select id="pc"><option value="KEYBOARDS">كيبوردات</option><option value="MICE">ماوسات</option><option value="MOUSEPADS">ماوس باد</option></select>
-        <button onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
+        <button id="save-btn" onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
+        
+        <h4 style="margin-top:30px; color:var(--main-red);">سجل الطلبات الواردة 📥</h4>
+        <div style="overflow-x:auto;">
+            <table class="orders-table">
+                <thead><tr><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المنتجات</th><th>المجموع</th></tr></thead>
+                <tbody id="orders-list"></tbody>
+            </table>
+        </div>
         <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:20px;">إغلاق</button>
     </div>
 </div>
 
 <script>
     let products = JSON.parse(localStorage.getItem('elite_v7')) || [];
+    let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
     let cart = [];
+    let editIdx = -1;
 
     function render() {
         let h = '';
@@ -117,6 +130,13 @@
             h += `</div>`;
         });
         document.getElementById('shop-data').innerHTML = h;
+        document.getElementById('orders-list').innerHTML = orders.map(o => `
+            <tr><td>${o.name}</td><td>${o.phone}</td><td>${o.area}</td><td>${o.items}</td><td>${o.total} ₪</td></tr>
+        `).reverse().join('');
+    }
+
+    function openAdmin() { 
+        if(prompt("كلمة السر:") === "أبو العبد") document.getElementById('admin-modal').style.display='block'; 
     }
 
     function addToCart(n, p) { cart.push({n, p}); document.getElementById('count').innerText = cart.length; }
@@ -129,7 +149,7 @@
 
     function showCart() {
         document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-summary').innerHTML = cart.length === 0 ? '<p style="text-align:center; color:grey;">السلة فارغة</p>' : cart.map((item, index) => `
+        document.getElementById('cart-summary').innerHTML = cart.map((item, index) => `
             <div class="cart-item">
                 <span>${item.n} - ${item.p} ₪</span>
                 <span class="remove-x" onclick="removeFromCart(${index})">×</span>
@@ -143,16 +163,41 @@
         document.getElementById('total-val').innerText = subtotal + delivery;
     }
 
-    function openAdmin() { if(prompt("كود الدخول:") === "-89") document.getElementById('admin-modal').style.display='block'; }
-    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
-
     function saveProduct() {
         const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
-        if(!n || !p) return alert("عبّي البيانات!");
-        products.push({name:n, price:parseInt(p), img:i, cat:c});
+        if(editIdx > -1) products[editIdx] = {name:n, price:parseInt(p), img:i, cat:c};
+        else products.push({name:n, price:parseInt(p), img:i, cat:c});
         localStorage.setItem('elite_v7', JSON.stringify(products));
         render(); closeModals();
     }
+
+    function handleDelete() {
+        const t = prompt("اسم المنتج لحذفه:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) { products.splice(idx,1); localStorage.setItem('elite_v7', JSON.stringify(products)); render(); }
+    }
+
+    function handleEdit() {
+        const t = prompt("اسم المنتج لتعديله:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) {
+            const p = products[idx];
+            document.getElementById('pn').value=p.name; document.getElementById('pp').value=p.price; document.getElementById('pi').value=p.img; document.getElementById('pc').value=p.cat;
+            editIdx = idx; document.getElementById('save-btn').innerText="تحديث المنتج";
+        }
+    }
+
+    function submitOrder() {
+        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
+        if(!n || !t || a === "0" || cart.length === 0) return alert("عبّي بياناتك!");
+        const total = document.getElementById('total-val').innerText;
+        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i => i.n).join(', '), total:total});
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+        alert("تم استلام طلبك بنجاح!");
+        location.reload();
+    }
+
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); editIdx = -1; }
 
     render();
 </script>
