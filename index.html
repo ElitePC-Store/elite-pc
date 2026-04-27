@@ -151,4 +151,54 @@
     function saveIdentity() {
         const n = document.getElementById('new-name').value, l = document.getElementById('new-logo').value;
         if(n) localStorage.setItem('store_name', n);
-        if
+        if(l) localStorage.setItem('store_logo', l);
+        alert("تم تحديث اللوجو والاسم! الموقع رح يعيد التشغيل.");
+        location.reload();
+    }
+
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
+        if(editIdx > -1) products[editIdx] = {name:n, price:parseInt(p), img:i, cat:c};
+        else products.push({name:n, price:parseInt(p), img:i, cat:c});
+        localStorage.setItem('elite_v7', JSON.stringify(products));
+        render(); closeModals();
+    }
+
+    function handleDelete() {
+        const t = prompt("اسم المنتج المراد حذفه:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) { products.splice(idx,1); localStorage.setItem('elite_v7', JSON.stringify(products)); render(); }
+    }
+
+    function handleEdit() {
+        const t = prompt("اسم المنتج لتعديله:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1) {
+            const p = products[idx];
+            document.getElementById('pn').value=p.name; document.getElementById('pp').value=p.price; document.getElementById('pi').value=p.img; document.getElementById('pc').value=p.cat;
+            editIdx = idx; document.getElementById('save-btn').innerText="تحديث المنتج";
+        }
+    }
+
+    function addToCart(n, p) { cart.push({n, p}); document.getElementById('count').innerText = cart.length; alert("تمت الإضافة للسلة!"); }
+    function showCart() {
+        document.getElementById('cart-modal').style.display='block';
+        document.getElementById('cart-summary').innerHTML = cart.map(i => `- ${i.n} (${i.p} ₪)`).join('<br>');
+        updateTotal();
+    }
+    function updateTotal() { const s = parseInt(document.getElementById('area').value); document.getElementById('total-val').innerText = cart.reduce((a,b) => a+b.p, 0) + s; }
+
+    function submitOrder() {
+        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
+        if(!n || !t || a === "0") return alert("البيانات ناقصة!");
+        const total = document.getElementById('total-val').innerText;
+        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i=>i.n).join(', '), total:total});
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+        document.getElementById('main-site').style.display='none'; document.getElementById('cart-modal').style.display='none'; document.getElementById('success-page').style.display='flex';
+        document.getElementById('order-details').innerHTML = `<b>الاسم:</b> ${n}<br><b>المجموع:</b> ${total} ₪<br>سنقوم بالتواصل معك قريباً.`;
+    }
+
+    init();
+</script>
+</body>
+</html>
