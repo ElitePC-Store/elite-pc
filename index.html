@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; --wa-green: #25d366; }
+        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; }
         
         header { background: rgba(10,10,10,0.95); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--main-red); }
@@ -16,6 +16,11 @@
         .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
+        /* ستايل أيقونة الحذف X */
+        .remove-btn { color: var(--main-red); cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .remove-btn:hover { transform: scale(1.2); color: white; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
+
         .category-section { padding: 30px 5%; }
         .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
@@ -23,16 +28,6 @@
         .product-card img { width: 100%; height: 160px; object-fit: contain; }
 
         .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-        /* أزرار التواصل */
-        .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
-        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .wa-btn { background: var(--wa-green); }
-        .tk-btn { background: #000; border: 1px solid #fff; }
-
-        /* ستايل حذف منتج من السلة */
-        .remove-item { color: #ff4d4d; cursor: pointer; font-size: 18px; margin-left: 10px; }
-        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
@@ -67,11 +62,6 @@
     </div>
 
     <div id="shop-data" class="category-section"></div>
-</div>
-
-<div class="social-float">
-    <a href="https://wa.me/972525995654" class="float-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn tk-btn" target="_blank"><i class="fab fa-tiktok"></i></a>
 </div>
 
 <div id="success-page">
@@ -183,19 +173,22 @@
         }
     }
 
-    function addToCart(n, p) { cart.push({n, p}); document.getElementById('count').innerText = cart.length; }
+    function addToCart(n, p) { 
+        cart.push({n, p}); 
+        document.getElementById('count').innerText = cart.length; 
+    }
 
     function removeFromCart(index) {
         cart.splice(index, 1);
         document.getElementById('count').innerText = cart.length;
-        showCart(); // إعادة عرض السلة بعد الحذف
+        showCart(); // إعادة العرض لتحديث السلة
     }
 
     function showCart() {
         document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-summary').innerHTML = cart.map((i, index) => `
-            <div class="cart-row">
-                <i class="fas fa-times-circle remove-item" onclick="removeFromCart(${index})"></i>
+        document.getElementById('cart-summary').innerHTML = cart.map((i, idx) => `
+            <div class="cart-item">
+                <i class="fas fa-times-circle remove-btn" onclick="removeFromCart(${idx})"></i>
                 <span>${i.n}</span>
                 <b>${i.p} ₪</b>
             </div>`).join('');
@@ -209,7 +202,7 @@
 
     function submitOrder() {
         const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
-        if(!n || !t || a === "0" || cart.length === 0) return alert("تأكد من بياناتك ومن وجود منتجات بالسلة!");
+        if(!n || !t || a === "0" || cart.length === 0) return alert("عبّي بياناتك وتأكد من السلة!");
         const total = document.getElementById('total-val').innerText;
         orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i => i.n).join(', '), total:total});
         localStorage.setItem('elite_orders', JSON.stringify(orders));
