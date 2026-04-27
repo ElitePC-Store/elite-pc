@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; }
+        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; --wa-green: #25d366; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; }
         
         header { background: rgba(10,10,10,0.95); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--main-red); }
@@ -24,17 +24,20 @@
 
         .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        /* Modals */
+        /* أزرار التواصل اللي طلبتها */
+        .social-float { position: fixed; left: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
+        .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .wa-btn { background: var(--wa-green); }
+        .tk-btn { background: #000; border: 1px solid #fff; }
+
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
         .modal-content { max-width: 500px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
 
-        /* Success Page Full Screen */
         #success-page { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 5000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .success-banner { background: var(--main-red); width: 100%; padding: 40px 0; margin-bottom: 30px; position: relative; }
         .success-check { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: #25d366; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; border: 5px solid #0a0a0a; }
 
-        /* Orders Table in Admin */
         .orders-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
         .orders-table th, .orders-table td { border: 1px solid #333; padding: 8px; text-align: right; }
         .orders-table th { background: #222; color: var(--main-red); }
@@ -62,13 +65,18 @@
     <div id="shop-data" class="category-section"></div>
 </div>
 
+<div class="social-float">
+    <a href="https://wa.me/972525995654" class="float-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://www.tiktok.com/@elite_pc_store" class="float-btn tk-btn" target="_blank"><i class="fab fa-tiktok"></i></a>
+</div>
+
 <div id="success-page">
     <div class="success-banner">
         <div class="success-check"><i class="fas fa-check"></i></div>
         <h1 style="margin:0;">شكراً لك. تم استلام طلبك.</h1>
     </div>
     <div style="max-width:600px; width:90%; background:#111; padding:20px; border-radius:10px; border:1px solid #222;">
-        <h3 style="border-bottom:1px solid #333; padding-bottom:10px;">تفاصيل الطلب</h3>
+        <h3>تفاصيل الطلب</h3>
         <p id="order-info" style="color:#aaa;"></p>
         <div id="order-items-final" style="text-align:right; margin:15px 0;"></div>
         <button onclick="location.reload()" class="buy-btn" style="width:150px;">إغلاق</button>
@@ -88,7 +96,7 @@
         <select id="pc"><option value="KEYBOARDS">كيبوردات</option><option value="MICE">ماوسات</option><option value="MOUSEPADS">ماوس باد</option></select>
         <button id="save-btn" onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
         
-        <h4 style="margin-top:30px; color:var(--main-red); border-bottom:1px solid #333;">سجل الطلبات الواردة 📥</h4>
+        <h4 style="margin-top:30px; color:var(--main-red);">سجل الطلبات الواردة 📥</h4>
         <div style="overflow-x:auto;">
             <table class="orders-table">
                 <thead><tr><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المنتجات</th><th>المجموع</th></tr></thead>
@@ -102,8 +110,7 @@
 <div id="cart-modal" class="modal">
     <div class="modal-content">
         <h3 style="text-align:center;">إتمام الطلب 🛒</h3>
-        <div id="cart-summary" style="background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border-right:4px solid var(--main-red);">
-            </div>
+        <div id="cart-summary" style="background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border-right:4px solid var(--main-red);"></div>
         <select id="area" onchange="updateTotal()">
             <option value="0">اختر منطقة التوصيل...</option>
             <option value="70">الداخل (+70 ₪)</option>
@@ -140,8 +147,6 @@
             h += `</div>`;
         });
         document.getElementById('shop-data').innerHTML = h;
-        
-        // تحديث سجل الطلبات في لوحة التحكم
         document.getElementById('orders-list').innerHTML = orders.map(o => `
             <tr><td>${o.name}</td><td>${o.phone}</td><td>${o.area}</td><td>${o.items}</td><td>${o.total} ₪</td></tr>
         `).reverse().join('');
@@ -190,15 +195,9 @@
     function submitOrder() {
         const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
         if(!n || !t || a === "0") return alert("عبّي بياناتك!");
-
         const total = document.getElementById('total-val').innerText;
-        const itemsNames = cart.map(i => i.n).join(', ');
-        
-        // حفظ الطلب في السجل
-        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:itemsNames, total:total});
+        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, items:cart.map(i => i.n).join(', '), total:total});
         localStorage.setItem('elite_orders', JSON.stringify(orders));
-
-        // إظهار صفحة النجاح
         document.getElementById('main-site').style.display = 'none';
         document.getElementById('cart-modal').style.display = 'none';
         document.getElementById('success-page').style.display = 'flex';
