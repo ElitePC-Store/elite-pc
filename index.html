@@ -16,7 +16,6 @@
         .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .hero-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--main-red); margin-bottom: 10px; }
 
-        /* ستايل السلة مع الصور */
         .cart-item { display: flex; align-items: center; gap: 15px; padding: 10px; background: #1a1a1a; margin-bottom: 8px; border-radius: 8px; border-right: 4px solid var(--main-red); }
         .cart-item img { width: 50px; height: 50px; object-fit: contain; border-radius: 4px; background: #000; }
         .cart-info { flex-grow: 1; }
@@ -34,7 +33,7 @@
         .float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; padding: 20px; overflow-y: auto; }
-        .modal-content { max-width: 700px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
+        .modal-content { max-width: 750px; margin: 30px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 6px; box-sizing: border-box; }
 
         #success-screen { display: none; text-align: center; padding: 100px 20px; }
@@ -100,14 +99,17 @@
 </div>
 
 <div id="admin-modal" class="modal">
-    <div class="modal-content" style="max-width: 900px;">
+    <div class="modal-content">
         <h3>إدارة المتجر ⚙️</h3>
-        <input type="text" id="new-logo-url" placeholder="رابط اللوجو الجديد">
-        <button onclick="updateLogo()" class="buy-btn" style="background:blue; margin-bottom:20px;">تحديث اللوجو</button>
+        
+        <div style="background:#1a1a1a; padding:10px; border-radius:8px; margin-bottom:15px;">
+            <input type="text" id="new-logo-url" placeholder="رابط اللوجو الجديد">
+            <button onclick="updateLogo()" class="buy-btn" style="background:blue; padding:8px;">تحديث اللوجو</button>
+        </div>
 
-        <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <button onclick="handleEdit()" style="flex:1; background:orange; border:none; padding:10px; border-radius:5px;">تعديل</button>
-            <button onclick="handleDelete()" style="flex:1; background:red; border:none; padding:10px; border-radius:5px; color:white;">حذف</button>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <button onclick="handleEdit()" style="flex:1; background:orange; border:none; padding:10px; border-radius:5px;">تعديل منتج</button>
+            <button onclick="handleDelete()" style="flex:1; background:red; border:none; padding:10px; border-radius:5px; color:white;">حذف منتج</button>
         </div>
         
         <input type="text" id="pn" placeholder="اسم المنتج">
@@ -120,7 +122,7 @@
         </select>
         <button id="save-btn" onclick="saveProduct()" class="buy-btn">حفظ المنتج</button>
         
-        <h4>الطلبات الواردة (بالصور) 📥</h4>
+        <h4>سجل الطلبات 📥</h4>
         <div style="overflow-x:auto;">
             <table class="orders-table">
                 <thead><tr><th>حذف</th><th>الصور</th><th>الاسم</th><th>الهاتف</th><th>المنطقة</th><th>المجموع</th></tr></thead>
@@ -132,7 +134,7 @@
 </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('elite_v10')) || [];
+    let products = JSON.parse(localStorage.getItem('elite_v11')) || [];
     let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
     let siteLogo = localStorage.getItem('elite_logo') || 'https://i.ibb.co/LzNfX6X/elite-logo.png';
     let cart = [];
@@ -170,62 +172,38 @@
         `).reverse().join('');
     }
 
-    function addToCart(n, p, img) { cart.push({n, p, img}); document.getElementById('count').innerText = cart.length; }
-
-    function showCart() {
-        document.getElementById('cart-modal').style.display='block';
-        document.getElementById('cart-summary').innerHTML = cart.map((item, index) => `
-            <div class="cart-item">
-                <img src="${item.img}">
-                <div class="cart-info">
-                    <div>${item.n}</div>
-                    <b style="color:var(--main-red)">${item.p} ₪</b>
-                </div>
-                <span class="remove-x" onclick="removeFromCart(${index})">×</span>
-            </div>`).join('');
-        updateTotal();
+    // تصفير خانات الإدخال
+    function clearInputs() {
+        document.getElementById('pn').value = '';
+        document.getElementById('pp').value = '';
+        document.getElementById('pi').value = '';
+        document.getElementById('new-logo-url').value = '';
+        editIdx = -1;
+        document.getElementById('save-btn').innerText = "حفظ المنتج";
     }
 
-    function removeFromCart(idx) { cart.splice(idx, 1); document.getElementById('count').innerText = cart.length; showCart(); }
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
+        if(!n || !p) return alert("عبّي البيانات!");
 
-    function submitOrder() {
-        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
-        if(!n || !t || a === "0" || cart.length === 0) return alert("كمل البيانات!");
+        if(editIdx > -1) products[editIdx] = {name:n, price:parseInt(p), img:i, cat:c};
+        else products.push({name:n, price:parseInt(p), img:i, cat:c});
         
-        orders.push({
-            name: n, phone: t, 
-            area: document.getElementById('area').options[document.getElementById('area').selectedIndex].text, 
-            images: cart.map(i => i.img),
-            total: document.getElementById('total-val').innerText
-        });
-        
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
-        document.getElementById('main-site').style.display = 'none';
-        document.getElementById('cart-modal').style.display = 'none';
-        document.getElementById('success-screen').style.display = 'block';
+        localStorage.setItem('elite_v11', JSON.stringify(products));
+        render();
+        clearInputs(); // تصفير الخانات بعد الحفظ
+        alert("تم حفظ المنتج بنجاح");
     }
 
     function updateLogo() {
         const url = document.getElementById('new-logo-url').value;
-        if(url) { siteLogo = url; localStorage.setItem('elite_logo', url); init(); alert("تم التحديث"); }
-    }
-
-    function openAdmin() { if(prompt("كلمة السر:") === "سامي") document.getElementById('admin-modal').style.display='block'; }
-    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); editIdx = -1; }
-    function deleteOrder(idx) { if(confirm("حذف الطلب؟")) { orders.splice(idx,1); localStorage.setItem('elite_orders', JSON.stringify(orders)); render(); } }
-
-    function saveProduct() {
-        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
-        if(editIdx > -1) products[editIdx] = {name:n, price:parseInt(p), img:i, cat:c};
-        else products.push({name:n, price:parseInt(p), img:i, cat:c});
-        localStorage.setItem('elite_v10', JSON.stringify(products));
-        render(); closeModals();
-    }
-
-    function handleDelete() {
-        const t = prompt("اسم المنتج لحذفه:");
-        const idx = products.findIndex(p => p.name === t);
-        if(idx > -1) { products.splice(idx,1); localStorage.setItem('elite_v10', JSON.stringify(products)); render(); }
+        if(url) {
+            siteLogo = url;
+            localStorage.setItem('elite_logo', url);
+            init();
+            clearInputs();
+            alert("تم تحديث اللوجو");
+        }
     }
 
     function handleEdit() {
@@ -233,15 +211,54 @@
         const idx = products.findIndex(p => p.name === t);
         if(idx > -1) {
             const p = products[idx];
-            document.getElementById('pn').value=p.name; document.getElementById('pp').value=p.price; document.getElementById('pi').value=p.img; document.getElementById('pc').value=p.cat;
-            editIdx = idx; document.getElementById('save-btn').innerText="تحديث المنتج";
+            document.getElementById('pn').value=p.name;
+            document.getElementById('pp').value=p.price;
+            document.getElementById('pi').value=p.img;
+            document.getElementById('pc').value=p.cat;
+            editIdx = idx;
+            document.getElementById('save-btn').innerText="تحديث المنتج الآن";
+        } else { alert("المنتج مش موجود!"); }
+    }
+
+    function handleDelete() {
+        const t = prompt("اسم المنتج لحذفه:");
+        const idx = products.findIndex(p => p.name === t);
+        if(idx > -1 && confirm("متأكد بدك تحذف " + t + "؟")) {
+            products.splice(idx,1);
+            localStorage.setItem('elite_v11', JSON.stringify(products));
+            render();
         }
     }
 
+    function openAdmin() { if(prompt("كلمة السر:") === "سامي") document.getElementById('admin-modal').style.display='block'; }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); clearInputs(); }
+    function deleteOrder(idx) { if(confirm("حذف الطلب؟")) { orders.splice(idx,1); localStorage.setItem('elite_orders', JSON.stringify(orders)); render(); } }
+
+    function addToCart(n, p, img) { cart.push({n, p, img}); document.getElementById('count').innerText = cart.length; }
+    function showCart() {
+        document.getElementById('cart-modal').style.display='block';
+        document.getElementById('cart-summary').innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <img src="${item.img}">
+                <div class="cart-info"><div>${item.n}</div><b style="color:var(--main-red)">${item.p} ₪</b></div>
+                <span class="remove-x" onclick="removeFromCart(${index})">×</span>
+            </div>`).join('');
+        updateTotal();
+    }
+    function removeFromCart(idx) { cart.splice(idx, 1); document.getElementById('count').innerText = cart.length; showCart(); }
     function updateTotal() {
         const delivery = parseInt(document.getElementById('area').value);
         const subtotal = cart.reduce((acc, item) => acc + item.p, 0);
         document.getElementById('total-val').innerText = subtotal + delivery;
+    }
+    function submitOrder() {
+        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
+        if(!n || !t || a === "0" || cart.length === 0) return alert("كمل بياناتك!");
+        orders.push({name: n, phone: t, area: document.getElementById('area').options[document.getElementById('area').selectedIndex].text, images: cart.map(i => i.img), total: document.getElementById('total-val').innerText});
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+        document.getElementById('main-site').style.display = 'none';
+        document.getElementById('cart-modal').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
     }
 
     init();
