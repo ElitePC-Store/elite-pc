@@ -3,137 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite PC Store</title>
+    <title>Elite PC Store | أداء بلا حدود</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; direction: rtl; }
-        header { background: #0a0a0a; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-red); position: sticky; top: 0; z-index: 1000; }
-        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); background: white; object-fit: contain; }
-        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1587202371725-574513615d62?q=80&w=2070') center/cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        :root { 
+            --main-red: #ff4d4d; 
+            --dark-bg: #0a0a0a; 
+            --card-bg: #111; 
+            --input-bg: #000;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: var(--dark-bg); 
+            color: white; 
+            margin: 0; 
+            direction: rtl;
+        }
+
+        /* --- الهيدر (Header) --- */
+        header { 
+            background: rgba(10,10,10,0.95); 
+            padding: 10px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid var(--main-red); 
+        }
+        /* تعديل ستايل اللوجو الجديد ليناسب الهيدر */
+        .logo-img-header { 
+            height: 50px; 
+            width: 50px; 
+            border-radius: 50%; 
+            border: 2px solid var(--main-red); 
+            object-fit: cover; 
+            background: white; /* خلفية بيضاء لبروز اللوجو */
+        }
+        
+        /* --- منطقة الهيرو (Hero Section) مع صورة الخلفية الجديدة --- */
+        .hero { 
+            height: 50vh; 
+            /* إضافة صورة خلفية لبيسي جيمنج فخم مع تعتيم خفيف لبروز النص */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1587202371725-574513615d62?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover; 
+            background-position: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+        }
+        /* اللوجو الكبير في نص الصفحة */
+        .hero-logo { 
+            width: 150px; 
+            height: 150px; 
+            border-radius: 50%; 
+            border: 4px solid var(--main-red); 
+            margin-bottom: 15px; 
+            background: white;
+            padding: 5px;
+        }
+        .hero h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: 1.2em;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        /* --- باقي تنسيقات المتجر --- */
         .category-section { padding: 30px 5%; }
-        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin: 40px 0 20px; color: var(--main-red); font-size: 24px; }
+        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); font-weight: 700; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .product-card { background: var(--card-bg); border-radius: 15px; padding: 15px; border: 1px solid #222; text-align: center; position: relative; }
+        
+        .product-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #222; text-align: center; position: relative; transition: 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--main-red); box-shadow: 0 5px 15px rgba(255, 77, 77, 0.1); }
         .product-card img { width: 100%; height: 160px; object-fit: contain; }
-        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: 'Cairo'; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; padding: 20px; }
-        .modal-content { max-width: 500px; margin: 50px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
-        .footer-socials { padding: 40px; text-align: center; background: #050505; border-top: 1px solid #222; }
-        .social-icon { color: white; font-size: 25px; margin: 0 15px; transition: 0.3s; }
-        .social-icon:hover { color: var(--main-red); }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
+        
+        /* ملصقات الحالة */
+        .badge { position: absolute; top: 10px; right: 10px; padding: 3px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; z-index: 10; }
+        .badge-new { background: #00c851; color: white; }
+        .badge-low { background: #ffbb33; color: black; }
+        .badge-out { background: #ff4444; color: white; }
+
+        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: 'Cairo', sans-serif; font-size: 14px; transition: 0.2s; }
+        .buy-btn:hover { background: #e04444; }
+        
+        /* مودال السلة */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; padding: 20px; overflow-y: auto; }
+        .modal-content { max-width: 500px; margin: 50px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); box-shadow: 0 0 30px rgba(255, 77, 77, 0.1); }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: var(--input-bg); border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo', sans-serif; text-align: right; }
+        .remove-item { color: var(--main-red); cursor: pointer; margin-right: 10px; }
     </style>
 </head>
 <body>
 
+<div id="main-site">
     <header>
         <div style="display:flex; align-items:center; gap:12px;">
-            <img id="site-logo-img" src="" class="logo-img">
-            <b>ELITE PC</b>
+            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" alt="Elite PC Logo" class="logo-img-header">
+            <b style="font-size: 1.2em;">ELITE PC</b>
         </div>
-        <button onclick="showCart()" style="background:var(--main-red); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">السلة (<span id="count">0</span>)</button>
+        <button onclick="showCart()" style="background:var(--main-red); border:none; padding:8px 18px; border-radius:5px; color:white; font-weight:bold; cursor:pointer; font-family: 'Cairo';">
+            <i class="fas fa-shopping-cart" style="margin-left: 5px;"></i> السلة (<span id="count">0</span>)
+        </button>
     </header>
 
-    <div id="hero-bg" class="hero">
-        <h1 style="font-size: 3em; margin:0;">ELITE PC STORE</h1>
-        <p style="font-size: 1.2em; color:#ccc;">أداء بلا حدود</p>
+    <div class="hero">
+        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" alt="Elite PC Big Logo" class="hero-logo">
+        <h1>ELITE PC STORE</h1>
+        <p>وجهتك الأولى لأقوى تجميعات وملحقات الجيمنج</p>
     </div>
 
-    <div id="shop-data" class="category-section"></div>
-
-    <div class="footer-socials">
-        <h3>تابعنا على</h3>
-        <a href="https://tiktok.com/@user" class="social-icon"><i class="fab fa-tiktok"></i></a>
-        <a href="https://wa.me/972525995654" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://instagram.com/user" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <p style="margin-top: 20px; color: #555;">&copy; 2026 Elite PC - All Rights Reserved</p>
+    <div id="shop-data" class="category-section">
+        <h3 style="text-align:center; color:#555; margin-top:50px;">جاري تحميل أحدث المنتجات...</h3>
     </div>
+</div>
 
-    <div id="cart-modal" class="modal">
-        <div id="order-form" class="modal-content">
-            <h3 style="text-align:center;">تفاصيل الطلب</h3>
-            <div id="cart-summary" style="margin-bottom: 15px;"></div>
-            <select id="area" onchange="updateTotal()">
-                <option value="0">اختر منطقة التوصيل...</option>
-                <option value="70">الداخل (+70 ₪)</option>
-                <option value="50">القدس (+50 ₪)</option>
-                <option value="20">الضفة (+20 ₪)</option>
-            </select>
-            <input type="text" id="cn" placeholder="الاسم الكامل">
-            <input type="text" id="ct" placeholder="رقم الهاتف">
-            <h2 style="text-align:center;">المجموع: <span id="total-val">0</span> ₪</h2>
-            <button onclick="submitOrderToAdmin()" class="buy-btn">تأكيد الطلب</button>
-            <button onclick="document.getElementById('cart-modal').style.display='none'" style="width:100%; background:none; border:none; color:grey; margin-top:10px; cursor:pointer;">إلغاء</button>
+<div id="cart-modal" class="modal">
+    <div class="modal-content">
+        <h3 style="text-align:center; margin-top:0;">إتمام الطلب 🛒</h3>
+        <div id="cart-summary" style="margin-bottom: 20px; max-height: 200px; overflow-y: auto; padding-left: 5px;"></div>
+        
+        <label>منطقة التوصيل:</label>
+        <select id="area" onchange="updateTotal()">
+            <option value="0">اختر منطقة التوصيل...</option>
+            <option value="70">الداخل (+70 ₪)</option>
+            <option value="50">القدس (+50 ₪)</option>
+            <option value="20">الضفة (+20 ₪)</option>
+        </select>
+        
+        <input type="text" id="cn" placeholder="اسمك الكامل">
+        <input type="text" id="ct" placeholder="رقم الهاتف">
+        
+        <div style="background:#0a0a0a; padding:15px; border-radius:8px; margin-top:15px; border:1px solid #222;">
+            <h3 style="text-align:center; margin:0; color:var(--main-red);">المجموع النهائي: <span id="total-val">0</span> ₪</h3>
         </div>
-
-        <div id="thank-you" class="modal-content" style="display:none; text-align:center;">
-            <i class="fas fa-check-circle" style="font-size: 50px; color: #25d366; margin-bottom: 20px;"></i>
-            <h2>شكراً لك!</h2>
-            <p>تم استلام طلبك بنجاح، سنتواصل معك قريباً.</p>
-            <button onclick="location.reload()" class="buy-btn">العودة للمتجر</button>
-        </div>
+        
+        <button onclick="submitOrder()" class="buy-btn" style="background:#25d366; font-size:16px; padding:15px;">
+            <i class="fab fa-whatsapp" style="margin-left: 8px;"></i> تأكيد الطلب عبر واتساب
+        </button>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; color:grey; margin-top:12px; cursor:pointer; font-family: 'Cairo';">رجوع للمتجر</button>
     </div>
+</div>
 
 <script>
+    // جلب المنتجات من التخزين المحلي (استخدام نفس المفتاح الموجود في لوحة الإدارة v15)
     let products = JSON.parse(localStorage.getItem('elite_v15')) || [];
     let cart = [];
 
-    // تحميل الصور من لوحة التحكم
-    const savedLogo = localStorage.getItem('elite_logo') || 'https://i.ibb.co/LzNfX6X/elite-logo.png';
-    const savedBg = localStorage.getItem('elite_bg') || 'https://images.unsplash.com/photo-1587202371725-574513615d62?q=80&w=2070';
-    document.getElementById('site-logo-img').src = savedLogo;
-    document.getElementById('hero-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${savedBg}')`;
-
+    // دالة عرض المنتجات حسب الفئات
     function render() {
         let h = '';
-        const cats = [{id:'KEYBOARDS', n:'كيبوردات'}, {id:'MICE', n:'ماوسات'}, {id:'MOUSEPADS', n:'ماوس باد'}, {id:'RGB', n:'إضاءة RGB'}, {id:'MIC', n:'مايك'}];
+        const cats = [
+            {id:'KEYBOARDS', n:'كيبوردات'}, 
+            {id:'MICE', n:'ماوسات'}, 
+            {id:'MOUSEPADS', n:'ماوس باد'},
+            {id:'RGB', n:'إضاءة RGB'},
+            {id:'MIC', n:'مايك'}
+        ];
+        
         cats.forEach(c => {
             const items = products.filter(p => p.cat === c.id);
             if(items.length > 0) {
                 h += `<div class="category-title">${c.n}</div><div class="grid">`;
-                h += items.map(p => `
+                h += items.map(p => {
+                    let badge = '';
+                    if(p.status === 'new') badge = '<span class="badge badge-new">جديد</span>';
+                    else if(p.status === 'low') badge = '<span class="badge badge-low">متبقي قليل</span>';
+                    else if(p.status === 'out') badge = '<span class="badge badge-out">نفدت</span>';
+
+                    return `
                     <div class="product-card">
-                        <img src="${p.img}">
+                        ${badge}
+                        <img src="${p.img}" alt="${p.name}">
                         <h3>${p.name}</h3>
-                        <div style="color:var(--main-red); font-weight:bold;">${p.price} ₪</div>
-                        <button class="buy-btn" onclick="addToCart('${p.name}', ${p.price}, '${p.img}')">إضافة للسلة</button>
-                    </div>
-                `).join('');
+                        <div style="color:var(--main-red); font-weight:bold; font-size:1.1em;">${p.price} ₪</div>
+                        <button class="buy-btn" ${p.status === 'out' ? 'disabled style="background:#333; color:#777; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${p.price}, '${p.img}')">
+                            ${p.status === 'out' ? 'غير متوفر حالياً' : '<i class="fas fa-cart-plus" style="margin-left:5px;"></i> إضافة للسلة'}
+                        </button>
+                    </div>`;
+                }).join('');
                 h += `</div>`;
             }
         });
-        document.getElementById('shop-data').innerHTML = h;
+        document.getElementById('shop-data').innerHTML = h || '<h2 style="text-align:center; color:#444; margin-top:80px;">قريباً... انتظروا أقوى العروض</h2>';
     }
 
-    function addToCart(n, p, img) { cart.push({n, p, img}); document.getElementById('count').innerText = cart.length; }
-    function showCart() { document.getElementById('cart-modal').style.display='block'; updateTotal(); }
-    function updateTotal() {
-        const sub = cart.reduce((a, b) => a + b.p, 0);
-        document.getElementById('total-val').innerText = sub + parseInt(document.getElementById('area').value || 0);
+    // إدارة السلة
+    function addToCart(n, p, img) {
+        cart.push({n, p, img});
+        document.getElementById('count').innerText = cart.length;
+        // تأثير بصري بسيط عند الإضافة
+        const cartBtn = document.querySelector('header button');
+        cartBtn.style.transform = 'scale(1.1)';
+        setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
     }
 
-    function submitOrderToAdmin() {
-        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
-        if(!n || !t || a === "0") return alert("عبّي بياناتك يا غالي");
-
-        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-        orders.push({
-            name: n, 
-            phone: t, 
-            area: document.getElementById('area').options[document.getElementById('area').selectedIndex].text,
-            total: document.getElementById('total-val').innerText,
-            items: cart.map(i => i.n).join(', '),
-            images: cart.map(i => i.img),
-            date: new Date().toLocaleString('ar-EG')
+    function showCart() {
+        if(cart.length === 0) return alert("السلة فارغة! أضف بعض المنتجات أولاً.");
+        document.getElementById('cart-modal').style.display='block';
+        
+        let s = '';
+        cart.forEach((item, index) => {
+            s += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:8px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${item.img}" style="width:40px; height:40px; object-fit:contain; background:#000; border-radius:4px;">
+                        <span>${item.n}</span>
+                    </div>
+                    <div style="font-weight:bold;">
+                        ${item.p} ₪ 
+                        <i class="fas fa-times-circle remove-item" onclick="removeFromCart(${index})" title="حذف"></i>
+                    </div>
+                  </div>`;
         });
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
-
-        // إخفاء الفورم وإظهار رسالة الشكر
-        document.getElementById('order-form').style.display = 'none';
-        document.getElementById('thank-you').style.display = 'block';
+        document.getElementById('cart-items-list').innerHTML = s;
+        updateTotal();
     }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        document.getElementById('count').innerText = cart.length;
+        if(cart.length === 0) {
+            closeModals();
+        } else {
+            showCart(); // إعادة عرض السلة بعد الحذف
+        }
+    }
+
+    function closeModals() {
+        document.getElementById('cart-modal').style.display = 'none';
+    }
+
+    function updateTotal() {
+        const subtotal = cart.reduce((acc, item) => acc + item.p, 0);
+        const shipping = parseInt(document.getElementById('area').value) || 0;
+        document.getElementById('total-val').innerText = subtotal + shipping;
+    }
+
+    // إرسال الطلب عبر واتساب
+    function submitOrder() {
+        const name = document.getElementById('cn').value.trim();
+        const phone = document.getElementById('ct').value.trim();
+        const areaSelect = document.getElementById('area');
+        const areaText = areaSelect.options[areaSelect.selectedIndex].text;
+        const shippingCost = areaSelect.value;
+        const total = document.getElementById('total-val').innerText;
+
+        if(!name || !phone || shippingCost === "0" || cart.length === 0) {
+            return alert("الرجاء إكمال جميع البيانات (الاسم، الهاتف، المنطقة) وتأكد من وجود منتجات في السلة.");
+        }
+
+        let orderDetails = "🛍️ *طلب جديد من ELITE PC STORE*\\n\\n";
+        orderDetails += `👤 *الاسم:* ${name}\\n`;
+        orderDetails += `📞 *الهاتف:* ${phone}\\n`;
+        orderDetails += `📍 *المنطقة:* ${areaText}\\n\\n`;
+        orderDetails += "🛒 *المنتجات:*\\n";
+        
+        cart.forEach((item, i) => {
+            orderDetails += `${i+1}. ${item.n} - ${item.p} ₪\\n`;
+        });
+        
+        orderDetails += `\\n📦 *التوصيل:* ${shippingCost} ₪\\n`;
+        orderDetails += `💰 *المجموع النهائي:* *${total} ₪*`;
+
+        // رقم الواتساب الخاص بك
+        const myWhatsapp = "972525995654"; 
+        
+        // فتح واتساب
+        window.open(`https://wa.me/${myWhatsapp}?text=${encodeURIComponent(orderDetails)}`, '_blank');
+        
+        // تفريغ السلة وإغلاق المودال
+        cart = [];
+        document.getElementById('count').innerText = "0";
+        document.getElementById('cn').value = '';
+        document.getElementById('ct').value = '';
+        document.getElementById('area').value = '0';
+        closeModals();
+    }
+
+    // إغلاق المودال عند الضغط خارجه
+    window.onclick = function(event) {
+        const modal = document.getElementById('cart-modal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // التشغيل الأولي
     render();
 </script>
 </body>
