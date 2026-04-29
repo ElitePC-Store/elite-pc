@@ -2,38 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة الإدارة | ELITE PC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+    <title>لوحة إدارة Abo al abd | ELITE PC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; }
-        body { font-family: 'Cairo'; background: #0a0a0a; color: white; padding: 20px; direction: rtl; display: none; }
-        .admin-box { max-width: 900px; margin: 0 auto; }
-        .card { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; padding: 20px; direction: rtl; display: none; }
+        .admin-box { max-width: 1000px; margin: 0 auto; }
+        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 25px; }
+        h3 { color: var(--main-red); border-bottom: 1px solid #222; padding-bottom: 10px; margin-top: 0; }
+        
+        /* تنسيق جدول الطلبات */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #050505; }
         th, td { border: 1px solid #222; padding: 12px; text-align: center; }
-        th { background: #1a1a1a; color: var(--main-red); }
-        .order-img { width: 35px; height: 35px; border-radius: 5px; margin: 2px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        th { background: #151515; color: var(--main-red); }
+        .order-img { width: 50px; height: 50px; object-fit: contain; border: 1px solid #333; border-radius: 5px; background: #000; margin: 2px; }
+        
+        /* تنسيق إدارة المنتجات */
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
+        .product-item:last-child { border: none; }
+
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; transition: 0.3s; }
+        .btn-save { background: var(--main-red); color: white; }
+        .btn-delete { background: #ff4444; color: white; padding: 5px 15px; width: auto; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div class="admin-box">
-    <h2 style="text-align:center;">لوحة تحكم Abo al abd ♔</h2>
+    <h1 style="text-align:center; color:var(--main-red);">لوحة التحكم الملكية ♔</h1>
 
     <div class="card">
-        <h3><i class="fas fa-shopping-cart"></i> الطلبات الجديدة</h3>
+        <h3><i class="fas fa-shopping-basket"></i> الطلبات الواردة (مع صور المنتجات)</h3>
         <div style="overflow-x: auto;">
             <table>
                 <thead>
                     <tr>
                         <th>التاريخ</th>
-                        <th>الزبون</th>
+                        <th>صور المنتج</th>
+                        <th>الزبون / المنطقة</th>
                         <th>المنتجات</th>
                         <th>المجموع</th>
-                        <th>حذف</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
                 <tbody id="orders-list"></tbody>
@@ -42,67 +53,134 @@
     </div>
 
     <div class="card">
-        <h3><i class="fas fa-image"></i> إعدادات الواجهة</h3>
-        <input type="text" id="site-logo" placeholder="رابط اللوجو الجديد">
-        <input type="text" id="site-bg" placeholder="رابط خلفية المتجر">
-        <button class="btn" style="background:#25d366;" onclick="saveSettings()">حفظ التعديلات</button>
+        <h3><i class="fas fa-edit"></i> المنتجات المعروضة حالياً (للحذف والتعديل)</h3>
+        <div id="current-products-list" style="max-height: 300px; overflow-y: auto;">
+            </div>
     </div>
 
     <div class="card">
-        <h3><i class="fas fa-plus"></i> إضافة منتج</h3>
+        <h3><i class="fas fa-plus-circle"></i> إضافة منتج جديد</h3>
         <input type="text" id="pn" placeholder="اسم المنتج">
         <input type="number" id="pp" placeholder="السعر">
-        <input type="text" id="pi" placeholder="رابط الصورة">
+        <input type="text" id="pi" placeholder="رابط صورة المنتج">
         <select id="pc">
             <option value="KEYBOARDS">كيبوردات</option>
             <option value="MICE">ماوسات</option>
+            <option value="MOUSEPADS">ماوس باد</option>
+            <option value="RGB">إضاءة RGB</option>
             <option value="MIC">مايك</option>
         </select>
-        <button class="btn" style="background:var(--main-red);" onclick="saveProduct()">نشر المنتج</button>
+        <button onclick="saveProduct()" class="btn btn-save">نشر في المتجر</button>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-image"></i> إعدادات هوية المتجر</h3>
+        <input type="text" id="site-logo" placeholder="رابط اللوجو الجديد">
+        <input type="text" id="site-bg" placeholder="رابط صورة البيسي (الخلفية)">
+        <button class="btn" style="background:#25d366; color:white;" onclick="saveSettings()">تحديث الصور</button>
+    </div>
+
+    <div style="text-align:center; margin-bottom: 50px;">
+        <a href="index.html" style="color:#555; text-decoration:none;">تسجيل خروج</a>
     </div>
 </div>
 
 <script>
-    if(prompt("كلمة السر:") === "جود") document.body.style.display="block";
-    else window.location.href="index.html";
+    // نظام الحماية
+    if(prompt("كلمة السر يا وحش:") === "جود") {
+        document.body.style.display = "block";
+    } else {
+        alert("كلمة السر غلط!");
+        window.location.href = "index.html";
+    }
 
     let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
     let products = JSON.parse(localStorage.getItem('elite_v15')) || [];
 
+    // 1. عرض الطلبات مع الصور
     function renderOrders() {
         document.getElementById('orders-list').innerHTML = orders.map((o, idx) => `
             <tr>
-                <td><small>${o.date}</small></td>
-                <td><b>${o.name}</b><br><small>${o.phone} (${o.area})</small></td>
-                <td>${o.items}</td>
-                <td style="color:var(--main-red)">${o.total} ₪</td>
-                <td><i class="fas fa-trash" onclick="deleteOrder(${idx})" style="color:red; cursor:pointer;"></i></td>
+                <td><small>${o.date || 'غير محدد'}</small></td>
+                <td>
+                    ${o.images ? o.images.map(img => `<img src="${img}" class="order-img">`).join('') : 'لا يوجد صورة'}
+                </td>
+                <td>
+                    <b>${o.name}</b><br>
+                    <span style="font-size:12px; color:#aaa;">${o.phone} | ${o.area}</span>
+                </td>
+                <td><small>${o.items}</small></td>
+                <td style="color:var(--main-red); font-weight:bold;">${o.total} ₪</td>
+                <td>
+                    <button onclick="deleteOrder(${idx})" style="background:none; border:none; color:red; cursor:pointer;">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
             </tr>
         `).reverse().join('');
     }
 
+    // 2. عرض قائمة المنتجات الحالية مع زر حذف
+    function renderCurrentProducts() {
+        const list = document.getElementById('current-products-list');
+        if(products.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:#555;'>لا يوجد منتجات حالياً</p>";
+            return;
+        }
+        list.innerHTML = products.map((p, idx) => `
+            <div class="product-item">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${p.img}" style="width:40px; height:40px; object-fit:contain; background:#000; border-radius:5px;">
+                    <span>${p.name} (${p.price} ₪)</span>
+                </div>
+                <button class="btn btn-delete" onclick="deleteProduct(${idx})">حذف</button>
+            </div>
+        `).reverse().join('');
+    }
+
+    // إضافة منتج
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, 
+              i = document.getElementById('pi').value, c = document.getElementById('pc').value;
+        if(!n || !p) return alert("عبّي البيانات كاملة!");
+
+        products.push({name: n, price: parseInt(p), img: i, cat: c, status: 'none'});
+        localStorage.setItem('elite_v15', JSON.stringify(products));
+        alert("تمت الإضافة بنجاح! ✅");
+        document.getElementById('pn').value = ''; document.getElementById('pp').value = ''; document.getElementById('pi').value = '';
+        renderCurrentProducts();
+    }
+
+    // حذف منتج من المتجر
+    function deleteProduct(idx) {
+        if(confirm("بدك تحذف هذا المنتج نهائياً من المتجر؟")) {
+            products.splice(idx, 1);
+            localStorage.setItem('elite_v15', JSON.stringify(products));
+            renderCurrentProducts();
+        }
+    }
+
+    // حذف طلبية
     function deleteOrder(idx) {
-        if(confirm("تم التوصيل وبدك تمسح الطلب؟")) {
+        if(confirm("هل تم إكمال الطلبية وبدك تمسحها من السجل؟")) {
             orders.splice(idx, 1);
             localStorage.setItem('elite_orders', JSON.stringify(orders));
             renderOrders();
         }
     }
 
+    // حفظ إعدادات الهوية
     function saveSettings() {
         localStorage.setItem('elite_logo', document.getElementById('site-logo').value);
         localStorage.setItem('elite_bg', document.getElementById('site-bg').value);
-        alert("تم الحفظ!");
+        alert("تم تحديث الصور! ستحتاج لتحديث صفحة المتجر لرؤية التغيير.");
     }
 
-    function saveProduct() {
-        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, i = document.getElementById('pi').value, c = document.getElementById('pc').value;
-        products.push({name:n, price:parseInt(p), img:i, cat:c});
-        localStorage.setItem('elite_v15', JSON.stringify(products));
-        alert("تم النشر!");
-    }
-
+    // التشغيل الأولي
     renderOrders();
+    renderCurrentProducts();
+    document.getElementById('site-logo').value = localStorage.getItem('elite_logo') || '';
+    document.getElementById('site-bg').value = localStorage.getItem('elite_bg') || '';
 </script>
 </body>
 </html>
