@@ -2,144 +2,136 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite PC Store</title>
+    <title>لوحة التحكم الملكية | ELITE PC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; --card-bg: #111; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; direction: rtl; }
-        header { background: #0a0a0a; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-red); position: sticky; top: 0; z-index: 1000; }
-        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--main-red); background: white; object-fit: contain; }
-        
-        .hero { height: 50vh; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        
-        .category-section { padding: 20px 5%; }
-        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin: 30px 0 15px; color: var(--main-red); font-size: 24px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        
-        .product-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; position: relative; border: 1px solid #222; }
-        .product-card img { width: 100%; height: 150px; object-fit: contain; }
-        
-        /* تصميم الملصقات */
-        .badge { position: absolute; top: 10px; right: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
-        .badge-new { background: #00c851; color: white; }
-        .badge-low { background: #ffbb33; color: black; }
-        .badge-out { background: #ff4444; color: white; }
-        .badge-soon { background: #33b5e5; color: white; }
-
-        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: 'Cairo'; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; padding: 20px; }
-        .modal-content { max-width: 500px; margin: 50px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; }
+        :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; padding: 20px; direction: rtl; display: none; }
+        .card { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
+        h3 { color: var(--main-red); margin-top: 0; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; }
+        .btn-edit { background: #ffbb33; color: black; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer; }
+        .btn-delete { background: #ff4444; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #222; padding: 10px; text-align: center; }
+        .order-img { width: 45px; height: 45px; object-fit: contain; margin: 2px; border: 1px solid #333; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <img id="site-logo-header" src="" class="logo-img">
-            <b>ELITE PC</b>
-        </div>
-        <button onclick="showCart()" style="background:var(--main-red); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">السلة (<span id="count">0</span>)</button>
-    </header>
+<div style="max-width: 1000px; margin: 0 auto;">
+    <h1 style="text-align:center; color:var(--main-red);">لوحة الإدارة ♔</h1>
 
-    <div id="hero-bg" class="hero">
-        <h1 style="font-size: 3em; margin:0;">ELITE PC STORE</h1>
-        <p>أداء بلا حدود</p>
+    <!-- إعدادات الهوية -->
+    <div class="card">
+        <h3><i class="fas fa-image"></i> تغيير اللوجو والخلفية</h3>
+        <input type="text" id="site-logo" placeholder="رابط اللوجو الجديد">
+        <input type="text" id="site-bg" placeholder="رابط صورة الخلفية (البيسي)">
+        <button class="btn" style="background:#25d366; color:white;" onclick="saveBranding()">تحديث الهوية ✅</button>
     </div>
 
-    <div id="shop-data" class="category-section"></div>
+    <!-- إضافة/تعديل منتج -->
+    <div class="card">
+        <h3 id="form-title">إضافة منتج جديد</h3>
+        <input type="hidden" id="edit-idx" value="-1">
+        <input type="text" id="pn" placeholder="اسم المنتج">
+        <input type="number" id="pp" placeholder="السعر">
+        <input type="text" id="pi" placeholder="رابط الصورة">
+        <select id="pc">
+            <option value="KEYBOARDS">كيبوردات</option>
+            <option value="MICE">ماوسات</option>
+            <option value="RGB">أضوية RGB</option>
+            <option value="MIC">مايك</option>
+        </select>
+        <button onclick="saveProduct()" id="main-btn" class="btn" style="background:var(--main-red); color:white;">نشر المنتج</button>
+    </div>
 
-    <div id="cart-modal" class="modal">
-        <div id="order-form" class="modal-content">
-            <h3 style="text-align:center;">إتمام الطلب</h3>
-            <select id="area" onchange="updateTotal()">
-                <option value="0">اختر المنطقة...</option>
-                <option value="70">الداخل (+70 ₪)</option>
-                <option value="50">القدس (+50 ₪)</option>
-                <option value="20">الضفة (+20 ₪)</option>
-            </select>
-            <input type="text" id="cn" placeholder="الاسم الكامل">
-            <input type="text" id="ct" placeholder="رقم الهاتف">
-            <h2 style="text-align:center;">المجموع: <span id="total-val">0</span> ₪</h2>
-            <button onclick="submitOrder()" class="buy-btn">تأكيد الطلب</button>
-        </div>
-        <div id="thank-you" class="modal-content" style="display:none; text-align:center;">
-            <h2>شكراً لك! ✅</h2>
-            <p>تم استلام طلبك، سنتواصل معك قريباً.</p>
-            <button onclick="location.reload()" class="buy-btn">العودة</button>
+    <!-- قائمة المنتجات -->
+    <div class="card">
+        <h3>المنتجات الحالية</h3>
+        <div id="p-list"></div>
+    </div>
+
+    <!-- الطلبات -->
+    <div class="card">
+        <h3>سجل الطلبات</h3>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr><th>التاريخ</th><th>الصور</th><th>الزبون</th><th>المنتجات</th><th>المجموع</th><th>حذف</th></tr>
+                </thead>
+                <tbody id="o-list"></tbody>
+            </table>
         </div>
     </div>
+</div>
 
 <script>
+    if(prompt("كلمة السر:") === "جود") document.body.style.display="block";
+    else window.location.href="index.html";
+
     let products = JSON.parse(localStorage.getItem('elite_v15')) || [];
-    let cart = [];
+    let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
 
-    // تحديث اللوجو والخلفية فوراً من الـ LocalStorage
-    function updateBranding() {
-        const logo = localStorage.getItem('elite_logo') || 'https://i.ibb.co/LzNfX6X/elite-logo.png';
-        const bg = localStorage.getItem('elite_bg') || 'https://images.unsplash.com/photo-1587202371725-574513615d62?q=80&w=2070';
-        document.getElementById('site-logo-header').src = logo;
-        document.getElementById('hero-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bg}')`;
+    function saveBranding() {
+        localStorage.setItem('elite_logo', document.getElementById('site-logo').value);
+        localStorage.setItem('elite_bg', document.getElementById('site-bg').value);
+        alert("تم تحديث المتجر!");
     }
 
-    function render() {
-        let h = '';
-        const cats = [
-            {id:'KEYBOARDS', n:'كيبوردات'}, 
-            {id:'MICE', n:'ماوسات'}, 
-            {id:'MOUSEPADS', n:'ماوس باد'}, 
-            {id:'RGB', n:'أضوية RGB'}, 
-            {id:'MIC', n:'مايك'}
-        ];
-        
-        cats.forEach(c => {
-            const items = products.filter(p => p.cat === c.id);
-            if(items.length > 0) {
-                h += `<div class="category-title">${c.n}</div><div class="grid">`;
-                h += items.map(p => {
-                    let badge = '';
-                    if(p.status === 'new') badge = '<span class="badge badge-new">جديد ✨</span>';
-                    else if(p.status === 'low') badge = '<span class="badge badge-low">متبقي قليل ⚠️</span>';
-                    else if(p.status === 'out') badge = '<span class="badge badge-out">نفدت ❌</span>';
-                    else if(p.status === 'soon') badge = '<span class="badge badge-soon">قريباً 🔜</span>';
-
-                    return `
-                    <div class="product-card">
-                        ${badge}
-                        <img src="${p.img}">
-                        <h3>${p.name}</h3>
-                        <div style="color:var(--main-red); font-weight:bold;">${p.price} ₪</div>
-                        <button class="buy-btn" onclick="addToCart('${p.name}', ${p.price}, '${p.img}')" ${p.status === 'out' || p.status === 'soon' ? 'disabled style="background:grey"' : ''}>
-                            ${p.status === 'soon' ? 'قريباً' : (p.status === 'out' ? 'نفدت' : 'إضافة للسلة')}
-                        </button>
-                    </div>`;
-                }).join('');
-                h += `</div>`;
-            }
-        });
-        document.getElementById('shop-data').innerHTML = h || '<h3 style="text-align:center">قريباً...</h3>';
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, 
+              i = document.getElementById('pi').value, c = document.getElementById('pc').value,
+              idx = document.getElementById('edit-idx').value;
+        const data = {name:n, price:parseInt(p), img:i, cat:c};
+        if(idx === "-1") products.push(data); else products[idx] = data;
+        localStorage.setItem('elite_v15', JSON.stringify(products));
+        location.reload();
     }
 
-    function addToCart(n, p, img) { cart.push({n, p, img}); document.getElementById('count').innerText = cart.length; alert("تمت الإضافة!"); }
-    function showCart() { document.getElementById('cart-modal').style.display='block'; updateTotal(); }
-    function updateTotal() {
-        const sub = cart.reduce((a, b) => a + b.p, 0);
-        document.getElementById('total-val').innerText = sub + parseInt(document.getElementById('area').value || 0);
-    }
-    function submitOrder() {
-        const n = document.getElementById('cn').value, t = document.getElementById('ct').value, a = document.getElementById('area').value;
-        if(!n || !t || a === "0") return alert("كمل البيانات");
-        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-        orders.push({name:n, phone:t, area:document.getElementById('area').options[document.getElementById('area').selectedIndex].text, total:document.getElementById('total-val').innerText, items:cart.map(i=>i.n).join(', '), images:cart.map(i=>i.img), date:new Date().toLocaleString()});
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
-        document.getElementById('order-form').style.display='none';
-        document.getElementById('thank-you').style.display='block';
+    function prepareEdit(idx) {
+        const p = products[idx];
+        document.getElementById('pn').value = p.name;
+        document.getElementById('pp').value = p.price;
+        document.getElementById('pi').value = p.img;
+        document.getElementById('pc').value = p.cat;
+        document.getElementById('edit-idx').value = idx;
+        document.getElementById('main-btn').innerText = "حفظ التعديل";
     }
 
-    updateBranding();
-    render();
+    function renderProducts() {
+        document.getElementById('p-list').innerHTML = products.map((p, idx) => `
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
+                <span>${p.name}</span>
+                <div>
+                    <button class="btn-edit" onclick="prepareEdit(${idx})">تعديل</button>
+                    <button class="btn-delete" onclick="deleteP(${idx})">حذف</button>
+                </div>
+            </div>
+        `).reverse().join('');
+    }
+
+    function renderOrders() {
+        document.getElementById('o-list').innerHTML = orders.map((o, idx) => `
+            <tr>
+                <td><small>${o.date}</small></td>
+                <td>${o.images.map(img => `<img src="${img}" class="order-img">`).join('')}</td>
+                <td>${o.name}<br>${o.phone}</td>
+                <td>${o.items}</td>
+                <td>${o.total} ₪</td>
+                <td><i class="fas fa-trash" style="color:red; cursor:pointer" onclick="deleteO(${idx})"></i></td>
+            </tr>
+        `).reverse().join('');
+    }
+
+    function deleteP(idx) { products.splice(idx,1); localStorage.setItem('elite_v15', JSON.stringify(products)); renderProducts(); }
+    function deleteO(idx) { orders.splice(idx,1); localStorage.setItem('elite_orders', JSON.stringify(orders)); renderOrders(); }
+
+    renderProducts(); renderOrders();
+    document.getElementById('site-logo').value = localStorage.getItem('elite_logo') || '';
+    document.getElementById('site-bg').value = localStorage.getItem('elite_bg') || '';
 </script>
 </body>
 </html>
