@@ -2,180 +2,136 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة إدارة Abo al abd | ELITE PC</title>
+    <title>لوحة التحكم الملكية | ELITE PC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; padding: 20px; direction: rtl; display: none; }
-        .admin-box { max-width: 1000px; margin: 0 auto; }
-        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 25px; }
-        h3 { color: var(--main-red); border-bottom: 1px solid #222; padding-bottom: 10px; margin-top: 0; }
-        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; transition: 0.3s; }
-        .btn-save { background: var(--main-red); color: white; }
-        .btn-edit { background: #ffbb33; color: black; padding: 5px 10px; font-size: 13px; margin-left: 5px; border-radius: 5px; cursor: pointer; border: none; }
-        .btn-delete { background: #ff4444; color: white; padding: 5px 10px; font-size: 13px; border-radius: 5px; cursor: pointer; border: none; }
-        .order-img { width: 50px; height: 50px; object-fit: contain; border-radius: 5px; }
+        .card { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
+        h3 { color: var(--main-red); margin-top: 0; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; }
+        .btn-edit { background: #ffbb33; color: black; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer; }
+        .btn-delete { background: #ff4444; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #222; padding: 12px; text-align: center; }
+        th, td { border: 1px solid #222; padding: 10px; text-align: center; }
+        .order-img { width: 45px; height: 45px; object-fit: contain; margin: 2px; border: 1px solid #333; }
     </style>
 </head>
 <body>
 
-<div class="admin-box">
-    <h1 style="text-align:center; color:var(--main-red);">لوحة التحكم الملكية ♔</h1>
+<div style="max-width: 1000px; margin: 0 auto;">
+    <h1 style="text-align:center; color:var(--main-red);">لوحة الإدارة ♔</h1>
 
+    <!-- إعدادات الهوية -->
     <div class="card">
-        <h3 id="form-title"><i class="fas fa-plus-circle"></i> إضافة منتج جديد</h3>
-        <input type="hidden" id="edit-index" value="-1">
+        <h3><i class="fas fa-image"></i> تغيير اللوجو والخلفية</h3>
+        <input type="text" id="site-logo" placeholder="رابط اللوجو الجديد">
+        <input type="text" id="site-bg" placeholder="رابط صورة الخلفية (البيسي)">
+        <button class="btn" style="background:#25d366; color:white;" onclick="saveBranding()">تحديث الهوية ✅</button>
+    </div>
+
+    <!-- إضافة/تعديل منتج -->
+    <div class="card">
+        <h3 id="form-title">إضافة منتج جديد</h3>
+        <input type="hidden" id="edit-idx" value="-1">
         <input type="text" id="pn" placeholder="اسم المنتج">
         <input type="number" id="pp" placeholder="السعر">
-        <input type="text" id="pi" placeholder="رابط صورة المنتج">
-        
-        <label>الفئة:</label>
+        <input type="text" id="pi" placeholder="رابط الصورة">
         <select id="pc">
             <option value="KEYBOARDS">كيبوردات</option>
             <option value="MICE">ماوسات</option>
-            <option value="MOUSEPADS">ماوس باد</option>
             <option value="RGB">أضوية RGB</option>
             <option value="MIC">مايك</option>
         </select>
-
-        <label>ملصق الحالة:</label>
-        <select id="ps">
-            <option value="none">بدون ملصق</option>
-            <option value="new">جديد ✨</option>
-            <option value="low">متبقي قليل ⚠️</option>
-            <option value="out">نفدت الكمية ❌</option>
-            <option value="soon">قريباً 🔜</option>
-        </select>
-
-        <button onclick="saveProduct()" id="main-btn" class="btn btn-save">نشر المنتج</button>
-        <button onclick="resetForm()" id="cancel-btn" style="display:none; background:grey; margin-top:10px;" class="btn">إلغاء التعديل</button>
+        <button onclick="saveProduct()" id="main-btn" class="btn" style="background:var(--main-red); color:white;">نشر المنتج</button>
     </div>
 
+    <!-- قائمة المنتجات -->
     <div class="card">
-        <h3><i class="fas fa-edit"></i> المنتجات الحالية</h3>
-        <div id="current-products-list"></div>
+        <h3>المنتجات الحالية</h3>
+        <div id="p-list"></div>
     </div>
 
+    <!-- الطلبات -->
     <div class="card">
-        <h3><i class="fas fa-shopping-basket"></i> سجل الطلبات</h3>
-        <div style="overflow-x: auto;">
+        <h3>سجل الطلبات</h3>
+        <div style="overflow-x:auto;">
             <table>
                 <thead>
                     <tr><th>التاريخ</th><th>الصور</th><th>الزبون</th><th>المنتجات</th><th>المجموع</th><th>حذف</th></tr>
                 </thead>
-                <tbody id="orders-list"></tbody>
+                <tbody id="o-list"></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    if(prompt("كلمة السر:") === "جود") document.body.style.display = "block";
-    else window.location.href = "index.html";
+    if(prompt("كلمة السر:") === "جود") document.body.style.display="block";
+    else window.location.href="index.html";
 
     let products = JSON.parse(localStorage.getItem('elite_v15')) || [];
     let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
 
-    // وظيفة الحفظ (إضافة أو تعديل)
-    function saveProduct() {
-        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, 
-              i = document.getElementById('pi').value, c = document.getElementById('pc').value, 
-              s = document.getElementById('ps').value, editIdx = document.getElementById('edit-index').value;
-
-        if(!n || !p) return alert("عبّي البيانات!");
-
-        const productData = {name: n, price: parseInt(p), img: i, cat: c, status: s};
-
-        if(editIdx === "-1") {
-            products.push(productData);
-            alert("تم النشر بنجاح!");
-        } else {
-            products[editIdx] = productData;
-            alert("تم التعديل بنجاح!");
-        }
-
-        localStorage.setItem('elite_v15', JSON.stringify(products));
-        resetForm();
-        renderCurrentProducts();
+    function saveBranding() {
+        localStorage.setItem('elite_logo', document.getElementById('site-logo').value);
+        localStorage.setItem('elite_bg', document.getElementById('site-bg').value);
+        alert("تم تحديث المتجر!");
     }
 
-    // تجهيز الفورم للتعديل
+    function saveProduct() {
+        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, 
+              i = document.getElementById('pi').value, c = document.getElementById('pc').value,
+              idx = document.getElementById('edit-idx').value;
+        const data = {name:n, price:parseInt(p), img:i, cat:c};
+        if(idx === "-1") products.push(data); else products[idx] = data;
+        localStorage.setItem('elite_v15', JSON.stringify(products));
+        location.reload();
+    }
+
     function prepareEdit(idx) {
         const p = products[idx];
         document.getElementById('pn').value = p.name;
         document.getElementById('pp').value = p.price;
         document.getElementById('pi').value = p.img;
         document.getElementById('pc').value = p.cat;
-        document.getElementById('ps').value = p.status || 'none';
-        document.getElementById('edit-index').value = idx;
-        
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> تعديل المنتج: ' + p.name;
-        document.getElementById('main-btn').innerText = "حفظ التعديلات";
-        document.getElementById('cancel-btn').style.display = "block";
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        document.getElementById('edit-idx').value = idx;
+        document.getElementById('main-btn').innerText = "حفظ التعديل";
     }
 
-    function resetForm() {
-        document.getElementById('edit-index').value = "-1";
-        document.getElementById('pn').value = '';
-        document.getElementById('pp').value = '';
-        document.getElementById('pi').value = '';
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> إضافة منتج جديد';
-        document.getElementById('main-btn').innerText = "نشر المنتج";
-        document.getElementById('cancel-btn').style.display = "none";
-    }
-
-    function deleteProduct(idx) {
-        if(confirm("حذف المنتج نهائياً؟")) {
-            products.splice(idx, 1);
-            localStorage.setItem('elite_v15', JSON.stringify(products));
-            renderCurrentProducts();
-        }
-    }
-
-    function renderCurrentProducts() {
-        document.getElementById('current-products-list').innerHTML = products.map((p, idx) => `
-            <div class="product-item">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <img src="${p.img}" style="width:40px; height:40px; object-fit:contain; background:#000;">
-                    <span>${p.name} (${p.price} ₪) - <small>${p.status}</small></span>
-                </div>
+    function renderProducts() {
+        document.getElementById('p-list').innerHTML = products.map((p, idx) => `
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
+                <span>${p.name}</span>
                 <div>
                     <button class="btn-edit" onclick="prepareEdit(${idx})">تعديل</button>
-                    <button class="btn-delete" onclick="deleteProduct(${idx})">حذف</button>
+                    <button class="btn-delete" onclick="deleteP(${idx})">حذف</button>
                 </div>
             </div>
         `).reverse().join('');
     }
 
     function renderOrders() {
-        document.getElementById('orders-list').innerHTML = orders.map((o, idx) => `
+        document.getElementById('o-list').innerHTML = orders.map((o, idx) => `
             <tr>
                 <td><small>${o.date}</small></td>
-                <td>${o.images ? o.images.map(img => `<img src="${img}" class="order-img">`).join('') : ''}</td>
-                <td>${o.name}<br><small>${o.phone}</small></td>
-                <td><small>${o.items}</small></td>
-                <td style="color:var(--main-red)">${o.total} ₪</td>
-                <td><i class="fas fa-trash" onclick="deleteOrder(${idx})" style="color:red; cursor:pointer;"></i></td>
+                <td>${o.images.map(img => `<img src="${img}" class="order-img">`).join('')}</td>
+                <td>${o.name}<br>${o.phone}</td>
+                <td>${o.items}</td>
+                <td>${o.total} ₪</td>
+                <td><i class="fas fa-trash" style="color:red; cursor:pointer" onclick="deleteO(${idx})"></i></td>
             </tr>
         `).reverse().join('');
     }
 
-    function deleteOrder(idx) {
-        if(confirm("مسح الطلبية؟")) {
-            orders.splice(idx, 1);
-            localStorage.setItem('elite_orders', JSON.stringify(orders));
-            renderOrders();
-        }
-    }
+    function deleteP(idx) { products.splice(idx,1); localStorage.setItem('elite_v15', JSON.stringify(products)); renderProducts(); }
+    function deleteO(idx) { orders.splice(idx,1); localStorage.setItem('elite_orders', JSON.stringify(orders)); renderOrders(); }
 
-    renderCurrentProducts();
-    renderOrders();
+    renderProducts(); renderOrders();
+    document.getElementById('site-logo').value = localStorage.getItem('elite_logo') || '';
+    document.getElementById('site-bg').value = localStorage.getItem('elite_bg') || '';
 </script>
 </body>
 </html>
