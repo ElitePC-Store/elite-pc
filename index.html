@@ -2,136 +2,92 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم الملكية | ELITE PC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite PC Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --main-red: #ff4d4d; --dark-bg: #0a0a0a; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; padding: 20px; direction: rtl; display: none; }
-        .card { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
-        h3 { color: var(--main-red); margin-top: 0; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; }
-        .btn-edit { background: #ffbb33; color: black; padding: 5px 10px; border-radius: 5px; margin-left: 5px; cursor: pointer; }
-        .btn-delete { background: #ff4444; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #222; padding: 10px; text-align: center; }
-        .order-img { width: 45px; height: 45px; object-fit: contain; margin: 2px; border: 1px solid #333; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; direction: rtl; }
+        header { background: #000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-red); }
+        .hero { height: 40vh; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; padding: 20px; }
+        .modal-content { max-width: 450px; margin: 50px auto; background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--main-red); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-family: 'Cairo'; }
+        .buy-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo'; }
     </style>
 </head>
 <body>
 
-<div style="max-width: 1000px; margin: 0 auto;">
-    <h1 style="text-align:center; color:var(--main-red);">لوحة الإدارة ♔</h1>
+    <header>
+        <img id="logo" src="" style="height:50px; border-radius:50%;">
+        <b>ELITE PC STORE</b>
+        <button onclick="showCart()" style="background:var(--main-red); color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">السلة (<span id="count">0</span>)</button>
+    </header>
 
-    <!-- إعدادات الهوية -->
-    <div class="card">
-        <h3><i class="fas fa-image"></i> تغيير اللوجو والخلفية</h3>
-        <input type="text" id="site-logo" placeholder="رابط اللوجو الجديد">
-        <input type="text" id="site-bg" placeholder="رابط صورة الخلفية (البيسي)">
-        <button class="btn" style="background:#25d366; color:white;" onclick="saveBranding()">تحديث الهوية ✅</button>
+    <div id="hero" class="hero">
+        <h1 style="font-size: 2.5em; text-shadow: 2px 2px 10px #000;">أقوى قطع الـ PC في مكان واحد</h1>
     </div>
 
-    <!-- إضافة/تعديل منتج -->
-    <div class="card">
-        <h3 id="form-title">إضافة منتج جديد</h3>
-        <input type="hidden" id="edit-idx" value="-1">
-        <input type="text" id="pn" placeholder="اسم المنتج">
-        <input type="number" id="pp" placeholder="السعر">
-        <input type="text" id="pi" placeholder="رابط الصورة">
-        <select id="pc">
-            <option value="KEYBOARDS">كيبوردات</option>
-            <option value="MICE">ماوسات</option>
-            <option value="RGB">أضوية RGB</option>
-            <option value="MIC">مايك</option>
-        </select>
-        <button onclick="saveProduct()" id="main-btn" class="btn" style="background:var(--main-red); color:white;">نشر المنتج</button>
-    </div>
+    <div id="shop" style="padding: 20px 5%;"></div>
 
-    <!-- قائمة المنتجات -->
-    <div class="card">
-        <h3>المنتجات الحالية</h3>
-        <div id="p-list"></div>
-    </div>
-
-    <!-- الطلبات -->
-    <div class="card">
-        <h3>سجل الطلبات</h3>
-        <div style="overflow-x:auto;">
-            <table>
-                <thead>
-                    <tr><th>التاريخ</th><th>الصور</th><th>الزبون</th><th>المنتجات</th><th>المجموع</th><th>حذف</th></tr>
-                </thead>
-                <tbody id="o-list"></tbody>
-            </table>
+    <!-- مودال الطلب -->
+    <div id="cart-modal" class="modal">
+        <div id="order-box" class="modal-content">
+            <h3 style="text-align:center;">إتمام الطلب</h3>
+            <select id="area" onchange="updateTotal()"><option value="0">اختر المنطقة...</option><option value="70">الداخل (+70 ₪)</option><option value="20">الضفة (+20 ₪)</option></select>
+            <input type="text" id="un" placeholder="الاسم الكامل">
+            <input type="text" id="ut" placeholder="رقم الهاتف">
+            <h2 style="text-align:center;">المجموع: <span id="total">0</span> ₪</h2>
+            <button onclick="confirmOrder()" class="buy-btn">تأكيد الطلب</button>
+        </div>
+        <!-- رسالة الشكر -->
+        <div id="thank-you" class="modal-content" style="display:none; text-align:center;">
+            <i class="fas fa-check-circle" style="font-size: 50px; color: #25d366;"></i>
+            <h2>تم استلام طلبك بنجاح!</h2>
+            <p>سنتواصل معك قريباً لتأكيد التوصيل.</p>
+            <button onclick="location.reload()" class="buy-btn">العودة للمتجر</button>
         </div>
     </div>
-</div>
 
 <script>
-    if(prompt("كلمة السر:") === "جود") document.body.style.display="block";
-    else window.location.href="index.html";
-
     let products = JSON.parse(localStorage.getItem('elite_v15')) || [];
-    let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
+    let cart = [];
 
-    function saveBranding() {
-        localStorage.setItem('elite_logo', document.getElementById('site-logo').value);
-        localStorage.setItem('elite_bg', document.getElementById('site-bg').value);
-        alert("تم تحديث المتجر!");
+    function updateStyle() {
+        document.getElementById('logo').src = localStorage.getItem('elite_logo') || 'https://via.placeholder.com/50';
+        document.getElementById('hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${localStorage.getItem('elite_bg') || 'https://via.placeholder.com/1200x400'}')`;
     }
 
-    function saveProduct() {
-        const n = document.getElementById('pn').value, p = document.getElementById('pp').value, 
-              i = document.getElementById('pi').value, c = document.getElementById('pc').value,
-              idx = document.getElementById('edit-idx').value;
-        const data = {name:n, price:parseInt(p), img:i, cat:c};
-        if(idx === "-1") products.push(data); else products[idx] = data;
-        localStorage.setItem('elite_v15', JSON.stringify(products));
-        location.reload();
+    function render() {
+        let h = '';
+        const cats = [{id:'KEYBOARDS', n:'كيبوردات'}, {id:'MICE', n:'ماوسات'}, {id:'RGB', n:'أضوية RGB'}, {id:'MIC', n:'مايك'}];
+        cats.forEach(c => {
+            const items = products.filter(p => p.cat === c.id);
+            if(items.length > 0) {
+                h += `<h2 style="color:var(--main-red); border-right:4px solid var(--main-red); padding-right:10px;">${c.n}</h2><div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:20px;">`;
+                h += items.map(p => `<div style="background:#111; padding:15px; border-radius:10px; text-align:center; border:1px solid #222;"><img src="${p.img}" style="width:100%; height:120px; object-fit:contain;"><h3>${p.name}</h3><b style="color:var(--main-red)">${p.price} ₪</b><button onclick="addToCart('${p.name}', ${p.price}, '${p.img}')" class="buy-btn">إضافة</button></div>`).join('');
+                h += `</div>`;
+            }
+        });
+        document.getElementById('shop').innerHTML = h;
     }
 
-    function prepareEdit(idx) {
-        const p = products[idx];
-        document.getElementById('pn').value = p.name;
-        document.getElementById('pp').value = p.price;
-        document.getElementById('pi').value = p.img;
-        document.getElementById('pc').value = p.cat;
-        document.getElementById('edit-idx').value = idx;
-        document.getElementById('main-btn').innerText = "حفظ التعديل";
+    function addToCart(n, p, img) { cart.push({n, p, img}); document.getElementById('count').innerText = cart.length; }
+    function showCart() { document.getElementById('cart-modal').style.display='block'; }
+    function updateTotal() { document.getElementById('total').innerText = cart.reduce((a,b)=>a+b.p,0) + parseInt(document.getElementById('area').value); }
+    
+    function confirmOrder() {
+        const n = document.getElementById('un').value, t = document.getElementById('ut').value, a = document.getElementById('area').value;
+        if(!n || !t || a === "0") return alert("عبّي البيانات");
+        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
+        orders.push({name:n, phone:t, total:document.getElementById('total').innerText, items:cart.map(i=>i.n).join(', '), images:cart.map(i=>i.img), date:new Date().toLocaleString()});
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+        document.getElementById('order-box').style.display='none';
+        document.getElementById('thank-you').style.display='block';
     }
 
-    function renderProducts() {
-        document.getElementById('p-list').innerHTML = products.map((p, idx) => `
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
-                <span>${p.name}</span>
-                <div>
-                    <button class="btn-edit" onclick="prepareEdit(${idx})">تعديل</button>
-                    <button class="btn-delete" onclick="deleteP(${idx})">حذف</button>
-                </div>
-            </div>
-        `).reverse().join('');
-    }
-
-    function renderOrders() {
-        document.getElementById('o-list').innerHTML = orders.map((o, idx) => `
-            <tr>
-                <td><small>${o.date}</small></td>
-                <td>${o.images.map(img => `<img src="${img}" class="order-img">`).join('')}</td>
-                <td>${o.name}<br>${o.phone}</td>
-                <td>${o.items}</td>
-                <td>${o.total} ₪</td>
-                <td><i class="fas fa-trash" style="color:red; cursor:pointer" onclick="deleteO(${idx})"></i></td>
-            </tr>
-        `).reverse().join('');
-    }
-
-    function deleteP(idx) { products.splice(idx,1); localStorage.setItem('elite_v15', JSON.stringify(products)); renderProducts(); }
-    function deleteO(idx) { orders.splice(idx,1); localStorage.setItem('elite_orders', JSON.stringify(orders)); renderOrders(); }
-
-    renderProducts(); renderOrders();
-    document.getElementById('site-logo').value = localStorage.getItem('elite_logo') || '';
-    document.getElementById('site-bg').value = localStorage.getItem('elite_bg') || '';
+    updateStyle(); render();
 </script>
 </body>
 </html>
