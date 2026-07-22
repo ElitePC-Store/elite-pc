@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --whatsapp: #25d366; }
+        :root { --main-red: #ff4d4d; --whatsapp: #25d366; --discord: #5865F2; }
         body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; margin: 0; }
 
         .delivery-bar {
@@ -43,11 +43,15 @@
             text-align: center; 
         }
 
+        /* الأزرار العائمة (واتساب وديسكورد) */
         .social-float {
             position: fixed;
             left: 20px;
             bottom: 20px;
             z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         .social-btn {
             width: 55px;
@@ -64,6 +68,7 @@
         }
         .social-btn:hover { transform: scale(1.1); }
         .wa { background: var(--whatsapp); }
+        .dc { background: var(--discord); }
 
         .category-section { padding: 40px 5%; }
         .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
@@ -117,7 +122,8 @@
     </div>
 
     <div class="social-float">
-        <a href="https://wa.me/972000000000" class="social-btn wa" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://wa.me/972525995654" class="social-btn wa" target="_blank" aria-label="WhatsApp" title="تواصل عبر الواتساب"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://discord.gg/zFp9uXmjU" class="social-btn dc" target="_blank" aria-label="Discord" title="انضم لسيرفر الديسكورد"><i class="fab fa-discord"></i></a>
     </div>
 
     <div id="shop-data"></div>
@@ -200,12 +206,10 @@
     </div>
 
 <script>
-    // جلب المنتجات والهوية المحدثة من لوحة التحكم (localStorage)
     let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
     let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
     let cart = [];
 
-    // تطبيق اللوجو والخلفية إذا تم تعديلها من لوحة التحكم
     if(identity.logo) {
         document.getElementById('logo-main').src = identity.logo;
         document.getElementById('hero-logo').src = identity.logo;
@@ -313,7 +317,6 @@
         let grandTotal = itemsTotal + deliveryFee;
         let itemsList = cart.map(i=>i.n).join(', ');
 
-        // حفظ الطلب لكي يظهر في لوحة التحكم (admin.html)
         let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
         orders.push({
             name: name,
@@ -325,7 +328,6 @@
         });
         localStorage.setItem('elite_orders', JSON.stringify(orders));
 
-        // إرسال الطلب لروم الديسكورد
         const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
         let discordMessage = {
             content: "🚨 **طلب جديد تم إستلامه في المتجر!** 🚨\n\n" +
