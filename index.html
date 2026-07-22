@@ -78,7 +78,6 @@
         .buy-btn, .action-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-family: 'Cairo', sans-serif; font-size: 16px; }
         .buy-btn:hover, .action-btn:hover { opacity: 0.9; }
 
-        /* نافذة إتمام الطلب بخطوات (Modal) */
         #checkout-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; overflow-y: auto; padding: 20px; }
         .modal-content { max-width: 600px; margin: 30px auto; background: #111; border: 2px solid var(--main-red); border-radius: 15px; padding: 30px; box-sizing: border-box; }
         
@@ -91,7 +90,6 @@
         .form-control { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
         .payment-box { background: #1a1a1a; border: 2px solid var(--main-red); border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
-        
         .order-summary-box { background: #161616; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #222; }
     </style>
 </head>
@@ -118,14 +116,12 @@
         <h1 style="font-size: 2.5rem; margin:0;">ELITE PC</h1>
     </div>
 
-    <!-- زر الواتساب العائم -->
     <div class="social-float">
         <a href="https://wa.me/972000000000" class="social-btn wa" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
     </div>
 
     <div id="shop-data"></div>
 
-    <!-- نافذة إتمام الطلب المتقدمة -->
     <div id="checkout-modal">
         <div class="modal-content">
             <div class="steps-indicator">
@@ -134,7 +130,6 @@
                 <div class="step-circle" id="ind-3">3</div>
             </div>
 
-            <!-- الخطوة 1: البيانات الشخصية -->
             <div id="step-1-content">
                 <h2 style="color:var(--main-red); text-align:center; margin-top:0;">بياناتك الشخصية</h2>
                 <div class="form-group">
@@ -165,7 +160,6 @@
                 <button onclick="goToStep2()" class="action-btn">التالي - مراجعة وتأكيد --</button>
             </div>
 
-            <!-- الخطوة 2: طريقة الدفع -->
             <div id="step-2-content" style="display:none;">
                 <h2 style="color:var(--main-red); text-align:center; margin-top:0;">طريقة الدفع</h2>
                 <div class="payment-box">
@@ -200,7 +194,6 @@
                 </div>
             </div>
 
-            <!-- الخطوة 3: النجاح -->
             <div id="step-3-content" style="display:none; text-align:center;">
                 <i class="fas fa-check-circle" style="font-size:65px; color:#25d366; margin-bottom: 15px;"></i>
                 <h2>تم استلام طلبك يا وحش!</h2>
@@ -221,124 +214,4 @@
         document.getElementById('hero-logo').src = identity.logo;
     }
     if(identity.bg) {
-        document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${identity.bg}')`;
-        document.getElementById('hero-bg').style.backgroundSize = 'cover';
-        document.getElementById('hero-bg').style.backgroundPosition = 'center';
-    }
-
-    function renderStore() {
-        const cats = [
-            {id:'KEYBOARDS', n:'كيبوردات'}, 
-            {id:'MICE', n:'ماوسات'}, 
-            {id:'MOUSEPADS', n:'ماوس باد'}
-        ];
-        
-        let h = '';
-        cats.forEach(c => {
-            const items = products.filter(p => p.cat === c.id);
-            h += `<div class="category-section">`;
-            h += `<div class="category-title">${c.n}</div><div class="grid">`;
-            h += items.length ? items.map(p => `
-                <div class="product-card">
-                    ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3 style="font-size:16px; margin:10px 0;">${p.name}</h3>
-                    <div style="color:var(--main-red); font-weight:bold; font-size:18px; margin-bottom:12px;">${p.price} ₪</div>
-                    <button class="buy-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">إضافة للسلة</button>
-                </div>`).join('') : '<p style="color:grey;">لا توجد منتجات في هذا القسم حالياً.</p>';
-            h += `</div></div>`;
-        });
-        
-        document.getElementById('shop-data').innerHTML = h;
-    }
-
-    function addToCart(n, p) { 
-        cart.push({n, p}); 
-        document.getElementById('count').innerText = cart.length; 
-        alert("تمت إضافة المنتج إلى السلة بنجاح!");
-    }
-
-    function openCheckout() {
-        if(cart.length === 0) {
-            alert("السلة فارغة حالياً!");
-            return;
-        }
-        document.getElementById('checkout-modal').style.display = 'block';
-    }
-
-    function updateTotal() {
-        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
-        let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
-        let grandTotal = itemsTotal + deliveryFee;
-
-        document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
-        document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
-        document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
-    }
-
-    function goToStep2() {
-        let name = document.getElementById('c-name').value;
-        let phone = document.getElementById('c-phone').value;
-        let region = document.getElementById('c-region').value;
-        let city = document.getElementById('c-city').value;
-
-        if(!name || !phone || region === "0" || !city) {
-            alert("الرجاء تعبئة جميع الحقول المطلوبة واختيار المنطقة!");
-            return;
-        }
-
-        document.getElementById('step-1-content').style.display = 'none';
-        document.getElementById('step-2-content').style.display = 'block';
-        
-        document.getElementById('ind-1').classList.remove('active');
-        document.getElementById('ind-2').classList.add('active');
-
-        // عرض تفاصيل السلة
-        let itemsNames = cart.map(i=>i.n).join(', ');
-        document.getElementById('summary-items-text').innerText = itemsNames;
-        updateTotal();
-    }
-
-    function goBackToStep1() {
-        document.getElementById('step-2-content').style.display = 'none';
-        document.getElementById('step-1-content').style.display = 'block';
-        
-        document.getElementById('ind-2').classList.remove('active');
-        document.getElementById('ind-1').classList.add('active');
-    }
-
-    function finishOrder() {
-        if(!document.getElementById('robot-check').checked) {
-            alert("الرجاء تأكيد أنك لست روبوت!");
-            return;
-        }
-
-        let name = document.getElementById('c-name').value;
-        let phone = document.getElementById('c-phone').value;
-        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
-        let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
-        let grandTotal = itemsTotal + deliveryFee;
-
-        orders.push({
-            name: name,
-            phone: phone,
-            items: cart.map(i=>i.n).join(', '),
-            total: grandTotal
-        });
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
-
-        document.getElementById('step-2-content').style.display = 'none';
-        document.getElementById('step-3-content').style.display = 'block';
-
-        document.getElementById('ind-2').classList.remove('active');
-        document.getElementById('ind-3').classList.add('active');
-
-        document.getElementById('final-msg').innerText = `يا ${name}، طلبك بقيمة ${grandTotal} ₪ صار عندنا. رح نتصل فيك قريباً على رقمك (${phone})!`;
-        cart = [];
-        document.getElementById('count').innerText = 0;
-    }
-
-    renderStore();
-</script>
-</body>
-</html>
+        document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,
