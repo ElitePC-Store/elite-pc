@@ -101,7 +101,7 @@
 
     <header>
         <div style="display:flex; align-items:center; gap:10px;">
-            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="logo-img" alt="Logo">
+            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-main" class="logo-img" alt="Logo">
             <b style="font-size: 18px;">ELITE PC</b>
         </div>
         <nav>
@@ -111,8 +111,8 @@
         </nav>
     </header>
 
-    <div class="hero">
-        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
+    <div class="hero" id="hero-bg">
+        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="hero-logo" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
         <h1 style="font-size: 2.5rem; margin:0;">ELITE PC</h1>
     </div>
 
@@ -200,14 +200,21 @@
     </div>
 
 <script>
-    // منتجات افتراضية أساسية للمتجر
-    let products = [
-        {name: "Logitech G Pro X Superlight", price: 450, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=500", cat: "MICE", badge: "جديد ✨"},
-        {name: "Razer BlackWidow V3", price: 380, img: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=500", cat: "KEYBOARDS", badge: "خصم 🔥"},
-        {name: "HyperX Gaming Mousepad XL", price: 120, img: "https://images.unsplash.com/photo-1626544827763-d516dce335e2?q=80&w=500", cat: "MOUSEPADS", badge: ""}
-    ];
-    
+    // جلب المنتجات والهوية المحدثة من لوحة التحكم (localStorage)
+    let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
+    let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
     let cart = [];
+
+    // تطبيق اللوجو والخلفية إذا تم تعديلها من لوحة التحكم
+    if(identity.logo) {
+        document.getElementById('logo-main').src = identity.logo;
+        document.getElementById('hero-logo').src = identity.logo;
+    }
+    if(identity.bg) {
+        document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${identity.bg}')`;
+        document.getElementById('hero-bg').style.backgroundSize = 'cover';
+        document.getElementById('hero-bg').style.backgroundPosition = 'center';
+    }
 
     function renderStore() {
         const cats = [
@@ -228,7 +235,7 @@
                     <h3 style="font-size:16px; margin:10px 0;">${p.name}</h3>
                     <div style="color:var(--main-red); font-weight:bold; font-size:18px; margin-bottom:12px;">${p.price} ₪</div>
                     <button class="buy-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">إضافة للسلة</button>
-                </div>`).join('') : '<p style="color:grey;">لا توجد منتجات في هذا القسم حالياً.</p>';
+                </div>`).join('') : '<p style="color:grey;">لا توجد منتجات في هذا القسم حالياً عبر لوحة التحكم.</p>';
             h += `</div></div>`;
         });
         
@@ -306,7 +313,19 @@
         let grandTotal = itemsTotal + deliveryFee;
         let itemsList = cart.map(i=>i.n).join(', ');
 
-        // إرسال الطلب بشكل آلي لروم الديسكورد المخصص
+        // حفظ الطلب لكي يظهر في لوحة التحكم (admin.html)
+        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
+        orders.push({
+            name: name,
+            phone: phone,
+            region: regionText,
+            city: city,
+            items: itemsList,
+            total: grandTotal
+        });
+        localStorage.setItem('elite_orders', JSON.stringify(orders));
+
+        // إرسال الطلب لروم الديسكورد
         const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
         let discordMessage = {
             content: "🚨 **طلب جديد تم إستلامه في المتجر!** 🚨\n\n" +
