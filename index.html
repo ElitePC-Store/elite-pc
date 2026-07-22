@@ -3,34 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELITE PC</title>
+    <title>ELITE PC - المتجر الرئيسي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; --whatsapp: #25d366; --discord: #5865F2; }
-        body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; margin: 0; }
+        :root { 
+            --main-red: #ff4d4d; 
+            --whatsapp: #25d366; 
+            --discord: #5865F2; 
+        }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: #0a0a0a; 
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+        }
 
+        /* شريط التوصيل المتحرك */
         .delivery-bar {
             background: var(--main-red);
             color: white;
             overflow: hidden;
             white-space: nowrap;
-            padding: 8px 0;
-            font-size: 14px;
+            padding: 10px 0;
+            font-size: 15px;
             font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         .delivery-text {
             display: inline-block;
-            animation: marquee 15s linear infinite;
+            animation: marquee 18s linear infinite;
         }
         @keyframes marquee {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
 
-        header { background: rgba(10,10,10,0.95); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--main-red); }
-        .logo-img { height: 45px; width: 45px; border-radius: 50%; border: 2px solid var(--main-red); object-fit: cover; }
+        /* الهيدر وشريط التنقل */
+        header { 
+            background: rgba(10,10,10,0.95); 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid var(--main-red); 
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo-container {
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+        }
 
+        .logo-img { 
+            height: 48px; 
+            width: 48px; 
+            border-radius: 50%; 
+            border: 2px solid var(--main-red); 
+            object-fit: cover; 
+        }
+
+        /* قسم الهيرو الترحيبي */
         .hero { 
             height: 50vh; 
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1547082299-de196ea013d6?q=80&w=2070'); 
@@ -41,9 +80,10 @@
             align-items: center; 
             justify-content: center; 
             text-align: center; 
+            border-bottom: 1px solid #222;
         }
 
-        /* الأزرار العائمة (واتساب وديسكورد) */
+        /* أزرار التواصل العائمة (واتساب وديسكورد) */
         .social-float {
             position: fixed;
             left: 20px;
@@ -53,6 +93,7 @@
             flex-direction: column;
             gap: 12px;
         }
+        
         .social-btn {
             width: 55px;
             height: 55px;
@@ -66,59 +107,206 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
             transition: 0.3s;
         }
-        .social-btn:hover { transform: scale(1.1); }
+        
+        .social-btn:hover { 
+            transform: scale(1.15); 
+        }
+        
         .wa { background: var(--whatsapp); }
         .dc { background: var(--discord); }
 
-        .category-section { padding: 40px 5%; }
-        .category-title { border-right: 5px solid var(--main-red); padding-right: 15px; margin-bottom: 25px; font-size: 24px; color: var(--main-red); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+        /* أقسام المنتجات والشبكة */
+        .category-section { 
+            padding: 40px 5%; 
+        }
         
-        .product-card { background: #111; border-radius: 12px; padding: 15px; border: 1px solid #222; text-align: center; position: relative; transition: 0.3s; }
-        .product-card:hover { border-color: var(--main-red); transform: translateY(-5px); }
-        .product-card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 10px; }
+        .category-title { 
+            border-right: 5px solid var(--main-red); 
+            padding-right: 15px; 
+            margin-bottom: 25px; 
+            font-size: 24px; 
+            color: var(--main-red); 
+        }
         
-        .badge { position: absolute; top: 15px; left: 15px; background: #2ecc71; color: white; padding: 3px 8px; font-size: 11px; border-radius: 5px; font-weight: bold; }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); 
+            gap: 20px; 
+        }
         
-        .buy-btn, .action-btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; font-family: 'Cairo', sans-serif; font-size: 16px; }
-        .buy-btn:hover, .action-btn:hover { opacity: 0.9; }
+        .product-card { 
+            background: #111; 
+            border-radius: 12px; 
+            padding: 15px; 
+            border: 1px solid #222; 
+            text-align: center; 
+            position: relative; 
+            transition: 0.3s; 
+        }
+        
+        .product-card:hover { 
+            border-color: var(--main-red); 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(255, 77, 77, 0.1);
+        }
+        
+        .product-card img { 
+            width: 100%; 
+            height: 160px; 
+            object-fit: contain; 
+            margin-bottom: 10px; 
+        }
+        
+        .badge { 
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            background: #2ecc71; 
+            color: white; 
+            padding: 4px 10px; 
+            font-size: 11px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+        }
+        
+        .buy-btn, .action-btn { 
+            background: var(--main-red); 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.2s; 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 16px; 
+        }
+        
+        .buy-btn:hover, .action-btn:hover { 
+            opacity: 0.9; 
+            transform: scale(1.02);
+        }
 
-        #checkout-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; overflow-y: auto; padding: 20px; }
-        .modal-content { max-width: 600px; margin: 30px auto; background: #111; border: 2px solid var(--main-red); border-radius: 15px; padding: 30px; box-sizing: border-box; }
+        /* نافذة إتمام الطلب الشاملة (Modal) */
+        #checkout-modal { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 5000; 
+            overflow-y: auto; 
+            padding: 20px; 
+            backdrop-filter: blur(5px);
+        }
         
-        .steps-indicator { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        .step-circle { width: 35px; height: 35px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #777; border: 1px solid #444; }
-        .step-circle.active { background: var(--main-red); color: white; border-color: var(--main-red); }
+        .modal-content { 
+            max-width: 600px; 
+            margin: 40px auto; 
+            background: #111; 
+            border: 2px solid var(--main-red); 
+            border-radius: 16px; 
+            padding: 35px; 
+            box-sizing: border-box; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        }
+        
+        .steps-indicator { 
+            display: flex; 
+            justify-content: space-around; 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid #222; 
+            padding-bottom: 15px; 
+        }
+        
+        .step-circle { 
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            background: #222; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: #777; 
+            border: 1px solid #444; 
+        }
+        
+        .step-circle.active { 
+            background: var(--main-red); 
+            color: white; 
+            border-color: var(--main-red); 
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: #aaa; }
-        .form-control { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        .form-group { 
+            margin-bottom: 18px; 
+        }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: #bbb; 
+            font-size: 14px;
+        }
+        
+        .form-control { 
+            width: 100%; 
+            padding: 12px 15px; 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            color: white; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 15px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--main-red);
+            outline: none;
+        }
 
-        .payment-box { background: #1a1a1a; border: 2px solid var(--main-red); border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
-        .order-summary-box { background: #161616; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #222; }
+        .payment-box { 
+            background: #1a1a1a; 
+            border: 2px solid var(--main-red); 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center; 
+            margin-bottom: 20px; 
+        }
+        
+        .order-summary-box { 
+            background: #161616; 
+            padding: 18px; 
+            border-radius: 10px; 
+            margin-top: 15px; 
+            border: 1px solid #222; 
+        }
     </style>
 </head>
 <body>
 
     <div class="delivery-bar">
-        <div class="delivery-text">⚡ يوجد توصيل لجميع مناطق الضفة والقدس والداخل ⚡ أداء بلا حدود مع ELITE PC ⚡</div>
+        <div class="delivery-text">⚡ توصيل لجميع مناطق الضفة (20₪) والقدس (50₪) والداخل (70₪) ⚡ أداء بلا حدود مع ELITE PC ⚡</div>
     </div>
 
     <header>
-        <div style="display:flex; align-items:center; gap:10px;">
+        <div class="logo-container">
             <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-main" class="logo-img" alt="Logo">
-            <b style="font-size: 18px;">ELITE PC</b>
+            <b style="font-size: 20px; letter-spacing: 1px;">ELITE PC</b>
         </div>
         <nav>
-            <button onclick="openCheckout()" style="background:var(--main-red); padding:10px 20px; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer;">
+            <button onclick="openCheckout()" style="background:var(--main-red); padding:10px 22px; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; display: flex; align-items: center; gap: 8px; font-family: 'Cairo';">
                 <i class="fas fa-shopping-cart"></i> السلة (<span id="count">0</span>)
             </button>
         </nav>
     </header>
 
     <div class="hero" id="hero-bg">
-        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="hero-logo" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
-        <h1 style="font-size: 2.5rem; margin:0;">ELITE PC</h1>
+        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="hero-logo" style="width:105px; height:105px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
+        <h1 style="font-size: 2.8rem; margin:0; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">ELITE PC</h1>
+        <p style="color: #aaa; margin-top: 5px; font-size: 15px;">احترافية الأداء وبلا تنازلات</p>
     </div>
 
     <div class="social-float">
@@ -137,7 +325,7 @@
             </div>
 
             <div id="step-1-content">
-                <h2 style="color:var(--main-red); text-align:center; margin-top:0;">بياناتك الشخصية</h2>
+                <h2 style="color:var(--main-red); text-align:center; margin-top:0;">بيانات التوصيل الشخصية</h2>
                 <div class="form-group">
                     <label>الاسم الكامل</label>
                     <input type="text" id="c-name" class="form-control" placeholder="أدخل اسمك الكامل">
@@ -149,213 +337,227 @@
                 <div class="form-group">
                     <label>عنوان التوصيل (المنطقة)</label>
                     <select id="c-region" class="form-control" onchange="updateTotal()">
-                        <option value="0">اختر منطقتك</option>
-                        <option value="60">الداخل - 60₪</option>
-                        <option value="100">القدس - 100₪</option>
-                        <option value="20">ضفة - 20₪</option>
+                        <option value="0">اختر منطقتك للتوصيل</option>
+                        <option value="20">الضفة - 20₪</option>
+                        <option value="50">القدس - 50₪</option>
+                        <option value="70">الداخل - 70₪</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>المدينة / القرية</label>
-                    <input type="text" id="c-city" class="form-control" placeholder="اكتب اسم مدينتك">
+                    <input type="text" id="c-city" class="form-control" placeholder="اكتب اسم مدينتك بالتفصيل">
                 </div>
-                <button onclick="goToStep2()" class="action-btn">التالي - مراجعة وتأكيد --</button>
+                <button onclick="goToStep2()" class="action-btn">التالي - مراجعة الطلب --</button>
             </div>
 
             <div id="step-2-content" style="display:none;">
-                <h2 style="color:var(--main-red); text-align:center; margin-top:0;">طريقة الدفع</h2>
+                <h2 style="color:var(--main-red); text-align:center; margin-top:0;">طريقة الدفع وملخص الطلب</h2>
                 <div class="payment-box">
-                    <i class="fas fa-money-bill-wave" style="font-size: 30px; color: #2ecc71; margin-bottom: 5px;"></i>
+                    <i class="fas fa-money-bill-wave" style="font-size: 32px; color: #2ecc71; margin-bottom: 8px;"></i>
                     <h3 style="margin:5px 0;">الدفع عند الاستلام</h3>
-                    <p style="color:#888; font-size:13px; margin:0;">Cash on Delivery</p>
+                    <p style="color:#888; font-size:13px; margin:0;">Cash on Delivery - ادفع نقداً عند استلام طلبك</p>
                 </div>
                 
                 <div class="order-summary-box">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                        <span id="summary-items-text">المنتجات</span>
-                        <span id="summary-items-price">₪0</span>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size: 14px;">
+                        <span id="summary-items-text" style="color:#ccc;">المنتجات المختارة</span>
+                        <span id="summary-items-price" style="font-weight: bold;">₪0</span>
                     </div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                        <span>التوصيل</span>
-                        <span id="summary-delivery-price">₪0</span>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size: 14px;">
+                        <span style="color:#ccc;">تكلفة التوصيل</span>
+                        <span id="summary-delivery-price" style="font-weight: bold;">₪0</span>
                     </div>
-                    <hr style="border-color:#333;">
+                    <hr style="border-color:#333; margin: 10px 0;">
                     <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:bold; color:var(--main-red);">
-                        <span>الإجمالي</span>
+                        <span>الإجمالي النهائي</span>
                         <span id="summary-total-price">₪0</span>
                     </div>
                 </div>
 
-                <div style="margin: 15px 0; text-align: right;">
-                    <label><input type="checkbox" id="robot-check"> أنا لست روبوت</label>
+                <div style="margin: 20px 0; text-align: right;">
+                    <label style="cursor: pointer;"><input type="checkbox" id="robot-check" style="margin-left: 8px;"> أنا لست روبوت (تأكيد الطلب)</label>
                 </div>
 
-                <div style="display:flex; gap:10px;">
-                    <button onclick="goBackToStep1()" class="action-btn" style="background:#333;">رجوع</button>
-                    <button onclick="finishOrder()" class="action-btn" style="background:#2ecc71;">تأكيد الطلب</button>
+                <div style="display:flex; gap:12px;">
+                    <button onclick="goBackToStep1()" class="action-btn" style="background:#333; width: 40%;">رجوع</button>
+                    <button onclick="finishOrder()" class="action-btn" style="background:#2ecc71; width: 60%;">تأكيد الطلب الآن ✓</button>
                 </div>
             </div>
 
-            <div id="step-3-content" style="display:none; text-align:center;">
-                <i class="fas fa-check-circle" style="font-size:65px; color:#25d366; margin-bottom: 15px;"></i>
-                <h2>تم استلام طلبك يا وحش!</h2>
-                <p id="final-msg" style="color: #ccc; margin: 20px 0;"></p>
-                <button onclick="location.reload()" class="action-btn">العودة للمتجر</button>
+            <div id="step-3-content" style="display:none; text-align:center; padding: 20px 0;">
+                <i class="fas fa-check-circle" style="font-size:75px; color:#25d366; margin-bottom: 15px;"></i>
+                <h2>تم استلام طلبك يا وحش بنجاح!</h2>
+                <p id="final-msg" style="color: #ccc; margin: 20px 0; line-height: 1.6;"></p>
+                <button onclick="location.reload()" class="action-btn" style="max-width: 250px; margin: 0 auto;">العودة للمتجر الرئيسي</button>
             </div>
         </div>
     </div>
 
-<script>
-    let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
-    let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
-    let cart = [];
+    <script>
+        // قراءة البيانات المحفوظة من لوحة التحكم (localStorage)
+        let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
+        let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
+        let cart = [];
 
-    if(identity.logo) {
-        document.getElementById('logo-main').src = identity.logo;
-        document.getElementById('hero-logo').src = identity.logo;
-    }
-    if(identity.bg) {
-        document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${identity.bg}')`;
-        document.getElementById('hero-bg').style.backgroundSize = 'cover';
-        document.getElementById('hero-bg').style.backgroundPosition = 'center';
-    }
-
-    function renderStore() {
-        const cats = [
-            {id:'KEYBOARDS', n:'كيبوردات'}, 
-            {id:'MICE', n:'ماوسات'}, 
-            {id:'MOUSEPADS', n:'ماوس باد'}
-        ];
-        
-        let h = '';
-        cats.forEach(c => {
-            const items = products.filter(p => p.cat === c.id);
-            h += `<div class="category-section">`;
-            h += `<div class="category-title">${c.n}</div><div class="grid">`;
-            h += items.length ? items.map(p => `
-                <div class="product-card">
-                    ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3 style="font-size:16px; margin:10px 0;">${p.name}</h3>
-                    <div style="color:var(--main-red); font-weight:bold; font-size:18px; margin-bottom:12px;">${p.price} ₪</div>
-                    <button class="buy-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">إضافة للسلة</button>
-                </div>`).join('') : '<p style="color:grey;">لا توجد منتجات في هذا القسم حالياً عبر لوحة التحكم.</p>';
-            h += `</div></div>`;
-        });
-        
-        document.getElementById('shop-data').innerHTML = h;
-    }
-
-    function addToCart(n, p) { 
-        cart.push({n, p}); 
-        document.getElementById('count').innerText = cart.length; 
-        alert("تمت إضافة المنتج إلى السلة بنجاح!");
-    }
-
-    function openCheckout() {
-        if(cart.length === 0) {
-            alert("السلة فارغة حالياً!");
-            return;
+        // تطبيق اللوجو والخلفية إذا تم تعديلها مسبقاً من لوحة التحكم
+        if(identity.logo) {
+            document.getElementById('logo-main').src = identity.logo;
+            document.getElementById('hero-logo').src = identity.logo;
         }
-        document.getElementById('checkout-modal').style.display = 'block';
-    }
-
-    function updateTotal() {
-        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
-        let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
-        let grandTotal = itemsTotal + deliveryFee;
-
-        document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
-        document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
-        document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
-    }
-
-    function goToStep2() {
-        let name = document.getElementById('c-name').value;
-        let phone = document.getElementById('c-phone').value;
-        let region = document.getElementById('c-region').value;
-        let city = document.getElementById('c-city').value;
-
-        if(!name || !phone || region === "0" || !city) {
-            alert("الرجاء تعبئة جميع الحقول واختيار المنطقة والمدينة!");
-            return;
+        if(identity.bg) {
+            document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${identity.bg}')`;
+            document.getElementById('hero-bg').style.backgroundSize = 'cover';
+            document.getElementById('hero-bg').style.backgroundPosition = 'center';
         }
 
-        document.getElementById('step-1-content').style.display = 'none';
-        document.getElementById('step-2-content').style.display = 'block';
-        
-        document.getElementById('ind-1').classList.remove('active');
-        document.getElementById('ind-2').classList.add('active');
-
-        let itemsNames = cart.map(i=>i.n).join(', ');
-        document.getElementById('summary-items-text').innerText = itemsNames;
-        updateTotal();
-    }
-
-    function goBackToStep1() {
-        document.getElementById('step-2-content').style.display = 'none';
-        document.getElementById('step-1-content').style.display = 'block';
-        
-        document.getElementById('ind-2').classList.remove('active');
-        document.getElementById('ind-1').classList.add('active');
-    }
-
-    function finishOrder() {
-        if(!document.getElementById('robot-check').checked) {
-            alert("الرجاء تأكيد أنك لست روبوت!");
-            return;
+        // دالة عرض المنتجات حسب التصنيفات في الواجهة
+        function renderStore() {
+            const cats = [
+                {id:'KEYBOARDS', n:'كيبوردات الميكانيكال'}, 
+                {id:'MICE', n:'الماوسات الاحترافية'}, 
+                {id:'MOUSEPADS', n:'ماوس باد الألعاب'}
+            ];
+            
+            let htmlContent = '';
+            cats.forEach(c => {
+                const items = products.filter(p => p.cat === c.id);
+                htmlContent += `<div class="category-section">`;
+                htmlContent += `<div class="category-title">${c.n}</div><div class="grid">`;
+                htmlContent += items.length ? items.map(p => `
+                    <div class="product-card">
+                        ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
+                        <img src="${p.img}" alt="${p.name}">
+                        <h3 style="font-size:16px; margin:12px 0 8px 0;">${p.name}</h3>
+                        <div style="color:var(--main-red); font-weight:bold; font-size:19px; margin-bottom:14px;">₪${p.price}</div>
+                        <button class="buy-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">إضافة للسلة 🛒</button>
+                    </div>`).join('') : '<p style="color:#777; font-size: 14px;">لا توجد منتجات مضافة لهذا القسم عبر لوحة التحكم حالياً.</p>';
+                htmlContent += `</div></div>`;
+            });
+            
+            document.getElementById('shop-data').innerHTML = htmlContent;
         }
 
-        let name = document.getElementById('c-name').value;
-        let phone = document.getElementById('c-phone').value;
-        let regionSelect = document.getElementById('c-region');
-        let regionText = regionSelect.options[regionSelect.selectedIndex].text;
-        let city = document.getElementById('c-city').value;
-        
-        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
-        let deliveryFee = parseInt(regionSelect.value) || 0;
-        let grandTotal = itemsTotal + deliveryFee;
-        let itemsList = cart.map(i=>i.n).join(', ');
+        // دالة إضافة المنتج للسلة
+        function addToCart(n, p) { 
+            cart.push({n, p}); 
+            document.getElementById('count').innerText = cart.length; 
+            alert("تمت إضافة المنتج إلى السلة بنجاح!");
+        }
 
-        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-        orders.push({
-            name: name,
-            phone: phone,
-            region: regionText,
-            city: city,
-            items: itemsList,
-            total: grandTotal
-        });
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
+        // فتح نافذة إتمام الطلب
+        function openCheckout() {
+            if(cart.length === 0) {
+                alert("السلة فارغة حالياً! أضف منتجات قبل متابعة الشراء.");
+                return;
+            }
+            document.getElementById('checkout-modal').style.display = 'block';
+        }
 
-        const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
-        let discordMessage = {
-            content: "🚨 **طلب جديد تم إستلامه في المتجر!** 🚨\n\n" +
-                     `👤 **الاسم:** ${name}\n` +
-                     `📞 **الهاتف:** ${phone}\n` +
-                     `📍 **المنطقة والمدينة:** ${regionText} - ${city}\n` +
-                     `🛒 **المنتجات:** ${itemsList}\n` +
-                     `💰 **المجموع الكلي:** ₪${grandTotal}`
-        };
+        // حساب الأسعار والتوصيل الإجمالي
+        function updateTotal() {
+            let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
+            let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
+            let grandTotal = itemsTotal + deliveryFee;
 
-        fetch(webhookURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(discordMessage)
-        }).catch(err => console.log(err));
+            document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
+            document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
+            document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
+        }
 
-        document.getElementById('step-2-content').style.display = 'none';
-        document.getElementById('step-3-content').style.display = 'block';
+        // الانتقال للخطوة الثانية
+        function goToStep2() {
+            let name = document.getElementById('c-name').value;
+            let phone = document.getElementById('c-phone').value;
+            let region = document.getElementById('c-region').value;
+            let city = document.getElementById('c-city').value;
 
-        document.getElementById('ind-2').classList.remove('active');
-        document.getElementById('ind-3').classList.add('active');
+            if(!name || !phone || region === "0" || !city) {
+                alert("الرجاء تعبئة جميع الحقول المطلوبة واختيار المنطقة والمدينة!");
+                return;
+            }
 
-        document.getElementById('final-msg').innerText = `يا ${name}، طلبك بقيمة ${grandTotal} ₪ صار عندنا. رح نتصل فيك قريباً على رقمك (${phone})!`;
-        cart = [];
-        document.getElementById('count').innerText = 0;
-    }
+            document.getElementById('step-1-content').style.display = 'none';
+            document.getElementById('step-2-content').style.display = 'block';
+            
+            document.getElementById('ind-1').classList.remove('active');
+            document.getElementById('ind-2').classList.add('active');
 
-    renderStore();
-</script>
+            let itemsNames = cart.map(i=>i.n).join(', ');
+            document.getElementById('summary-items-text').innerText = itemsNames;
+            updateTotal();
+        }
+
+        // العودة للخطوة الأولى
+        function goBackToStep1() {
+            document.getElementById('step-2-content').style.display = 'none';
+            document.getElementById('step-1-content').style.display = 'block';
+            
+            document.getElementById('ind-2').classList.remove('active');
+            document.getElementById('ind-1').classList.add('active');
+        }
+
+        // إنهاء الطلب وإرساله للوحة التحكم وديسكورد
+        function finishOrder() {
+            if(!document.getElementById('robot-check').checked) {
+                alert("الرجاء التأكيد بأنك لست روبوت عبر تحديد المربع!");
+                return;
+            }
+
+            let name = document.getElementById('c-name').value;
+            let phone = document.getElementById('c-phone').value;
+            let regionSelect = document.getElementById('c-region');
+            let regionText = regionSelect.options[regionSelect.selectedIndex].text;
+            let city = document.getElementById('c-city').value;
+            
+            let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
+            let deliveryFee = parseInt(regionSelect.value) || 0;
+            let grandTotal = itemsTotal + deliveryFee;
+            let itemsList = cart.map(i=>i.n).join(', ');
+
+            // حفظ الطلب في ذاكرة المتصفح لكي يظهر بلوحة التحكم (admin.html)
+            let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
+            orders.push({
+                name: name,
+                phone: phone,
+                region: regionText,
+                city: city,
+                items: itemsList,
+                total: grandTotal
+            });
+            localStorage.setItem('elite_orders', JSON.stringify(orders));
+
+            // إرسال تفاصيل الطلب إلى ويبهوك ديسكورد الخاص بك تلقائياً
+            const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
+            let discordMessage = {
+                content: "🚨 **طلب جديد تم إستلامه في المتجر!** 🚨\n\n" +
+                         `👤 **الاسم:** ${name}\n` +
+                         `📞 **الهاتف:** ${phone}\n` +
+                         `📍 **المنطقة والمدينة:** ${regionText} - ${city}\n` +
+                         `🛒 **المنتجات:** ${itemsList}\n` +
+                         `💰 **المجموع الكلي:** ₪${grandTotal}`
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(discordMessage)
+            }).catch(err => console.log(err));
+
+            // الانتقال لواجهة إتمام الطلب والنجاح (الخطوة 3)
+            document.getElementById('step-2-content').style.display = 'none';
+            document.getElementById('step-3-content').style.display = 'block';
+
+            document.getElementById('ind-2').classList.remove('active');
+            document.getElementById('ind-3').classList.add('active');
+
+            document.getElementById('final-msg').innerText = `يا ${name}، تم تسجيل طلبك بنجاح بقيمة إجمالية ${grandTotal} ₪. سيتم التواصل معك هاتفياً قريباً على الرقم (${phone}) لتأكيد موعد التوصيل!`;
+            
+            cart = [];
+            document.getElementById('count').innerText = 0;
+        }
+
+        // تشغيل عرض المتجر عند التحميل
+        renderStore();
+    </script>
 </body>
 </html>
