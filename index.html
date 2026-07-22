@@ -101,8 +101,8 @@
 
     <header>
         <div style="display:flex; align-items:center; gap:10px;">
-            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-main" class="logo-img" alt="Logo">
-            <b id="store-name" style="font-size: 18px;">ELITE PC</b>
+            <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" class="logo-img" alt="Logo">
+            <b style="font-size: 18px;">ELITE PC</b>
         </div>
         <nav>
             <button onclick="openCheckout()" style="background:var(--main-red); padding:10px 20px; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer;">
@@ -111,8 +111,8 @@
         </nav>
     </header>
 
-    <div class="hero" id="hero-bg">
-        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="hero-logo" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
+    <div class="hero">
+        <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" style="width:100px; height:100px; border-radius:50%; border:2px solid var(--main-red); margin-bottom:15px; object-fit:cover;" alt="Hero Logo">
         <h1 style="font-size: 2.5rem; margin:0;">ELITE PC</h1>
     </div>
 
@@ -141,10 +141,6 @@
                     <input type="text" id="c-phone" class="form-control" placeholder="05xxxxxxxx">
                 </div>
                 <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" id="c-email" class="form-control" placeholder="name@gmail.com">
-                </div>
-                <div class="form-group">
                     <label>عنوان التوصيل (المنطقة)</label>
                     <select id="c-region" class="form-control" onchange="updateTotal()">
                         <option value="0">اختر منطقتك</option>
@@ -154,7 +150,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>المدينة / اسم ضيعتك</label>
+                    <label>المدينة / القرية</label>
                     <input type="text" id="c-city" class="form-control" placeholder="اكتب اسم مدينتك">
                 </div>
                 <button onclick="goToStep2()" class="action-btn">التالي - مراجعة وتأكيد --</button>
@@ -204,14 +200,141 @@
     </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
-    let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-    let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
+    // منتجات افتراضية أساسية للمتجر
+    let products = [
+        {name: "Logitech G Pro X Superlight", price: 450, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=500", cat: "MICE", badge: "جديد ✨"},
+        {name: "Razer BlackWidow V3", price: 380, img: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=500", cat: "KEYBOARDS", badge: "خصم 🔥"},
+        {name: "HyperX Gaming Mousepad XL", price: 120, img: "https://images.unsplash.com/photo-1626544827763-d516dce335e2?q=80&w=500", cat: "MOUSEPADS", badge: ""}
+    ];
+    
     let cart = [];
 
-    if(identity.logo) {
-        document.getElementById('logo-main').src = identity.logo;
-        document.getElementById('hero-logo').src = identity.logo;
+    function renderStore() {
+        const cats = [
+            {id:'KEYBOARDS', n:'كيبوردات'}, 
+            {id:'MICE', n:'ماوسات'}, 
+            {id:'MOUSEPADS', n:'ماوس باد'}
+        ];
+        
+        let h = '';
+        cats.forEach(c => {
+            const items = products.filter(p => p.cat === c.id);
+            h += `<div class="category-section">`;
+            h += `<div class="category-title">${c.n}</div><div class="grid">`;
+            h += items.length ? items.map(p => `
+                <div class="product-card">
+                    ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
+                    <img src="${p.img}" alt="${p.name}">
+                    <h3 style="font-size:16px; margin:10px 0;">${p.name}</h3>
+                    <div style="color:var(--main-red); font-weight:bold; font-size:18px; margin-bottom:12px;">${p.price} ₪</div>
+                    <button class="buy-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">إضافة للسلة</button>
+                </div>`).join('') : '<p style="color:grey;">لا توجد منتجات في هذا القسم حالياً.</p>';
+            h += `</div></div>`;
+        });
+        
+        document.getElementById('shop-data').innerHTML = h;
     }
-    if(identity.bg) {
-        document.getElementById('hero-bg').style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,
+
+    function addToCart(n, p) { 
+        cart.push({n, p}); 
+        document.getElementById('count').innerText = cart.length; 
+        alert("تمت إضافة المنتج إلى السلة بنجاح!");
+    }
+
+    function openCheckout() {
+        if(cart.length === 0) {
+            alert("السلة فارغة حالياً!");
+            return;
+        }
+        document.getElementById('checkout-modal').style.display = 'block';
+    }
+
+    function updateTotal() {
+        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
+        let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
+        let grandTotal = itemsTotal + deliveryFee;
+
+        document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
+        document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
+        document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
+    }
+
+    function goToStep2() {
+        let name = document.getElementById('c-name').value;
+        let phone = document.getElementById('c-phone').value;
+        let region = document.getElementById('c-region').value;
+        let city = document.getElementById('c-city').value;
+
+        if(!name || !phone || region === "0" || !city) {
+            alert("الرجاء تعبئة جميع الحقول واختيار المنطقة والمدينة!");
+            return;
+        }
+
+        document.getElementById('step-1-content').style.display = 'none';
+        document.getElementById('step-2-content').style.display = 'block';
+        
+        document.getElementById('ind-1').classList.remove('active');
+        document.getElementById('ind-2').classList.add('active');
+
+        let itemsNames = cart.map(i=>i.n).join(', ');
+        document.getElementById('summary-items-text').innerText = itemsNames;
+        updateTotal();
+    }
+
+    function goBackToStep1() {
+        document.getElementById('step-2-content').style.display = 'none';
+        document.getElementById('step-1-content').style.display = 'block';
+        
+        document.getElementById('ind-2').classList.remove('active');
+        document.getElementById('ind-1').classList.add('active');
+    }
+
+    function finishOrder() {
+        if(!document.getElementById('robot-check').checked) {
+            alert("الرجاء تأكيد أنك لست روبوت!");
+            return;
+        }
+
+        let name = document.getElementById('c-name').value;
+        let phone = document.getElementById('c-phone').value;
+        let regionSelect = document.getElementById('c-region');
+        let regionText = regionSelect.options[regionSelect.selectedIndex].text;
+        let city = document.getElementById('c-city').value;
+        
+        let itemsTotal = cart.reduce((a,b) => a+b.p, 0);
+        let deliveryFee = parseInt(regionSelect.value) || 0;
+        let grandTotal = itemsTotal + deliveryFee;
+        let itemsList = cart.map(i=>i.n).join(', ');
+
+        // إرسال الطلب بشكل آلي لروم الديسكورد المخصص
+        const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
+        let discordMessage = {
+            content: "🚨 **طلب جديد تم إستلامه في المتجر!** 🚨\n\n" +
+                     `👤 **الاسم:** ${name}\n` +
+                     `📞 **الهاتف:** ${phone}\n` +
+                     `📍 **المنطقة والمدينة:** ${regionText} - ${city}\n` +
+                     `🛒 **المنتجات:** ${itemsList}\n` +
+                     `💰 **المجموع الكلي:** ₪${grandTotal}`
+        };
+
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(discordMessage)
+        }).catch(err => console.log(err));
+
+        document.getElementById('step-2-content').style.display = 'none';
+        document.getElementById('step-3-content').style.display = 'block';
+
+        document.getElementById('ind-2').classList.remove('active');
+        document.getElementById('ind-3').classList.add('active');
+
+        document.getElementById('final-msg').innerText = `يا ${name}، طلبك بقيمة ${grandTotal} ₪ صار عندنا. رح نتصل فيك قريباً على رقمك (${phone})!`;
+        cart = [];
+        document.getElementById('count').innerText = 0;
+    }
+
+    renderStore();
+</script>
+</body>
+</html>
