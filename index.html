@@ -550,3 +550,150 @@
             
             document.getElementById('shop-data').innerHTML = storeHTML;
         }
+
+        function addToCart(productName, productPrice) { 
+            cart.push({n: productName, p: productPrice}); 
+            document.getElementById('count').innerText = cart.length; 
+            alert("تمت إضافة المنتج إلى السلة بنجاح!");
+        }
+
+        function openCheckout() {
+            if(cart.length === 0) {
+                alert("السلة فارغة حالياً! أضف بعض المنتجات لمتابعة الشراء.");
+                return;
+            }
+            document.getElementById('checkout-modal').style.display = 'block';
+        }
+
+        // دالة تطبيق الكوبون
+        function applyCoupon() {
+            let codeVal = document.getElementById('coupon-input').value.trim();
+            let msgEl = document.getElementById('coupon-msg');
+            
+            let foundCoupon = coupons.find(c => c.code.toLowerCase() === codeVal.toLowerCase());
+            
+            if(foundCoupon) {
+                activeDiscount = foundCoupon.amount;
+                msgEl.style.color = '#2ecc71';
+                msgEl.innerText = `✓ تم تطبيق الكوبون بنجاح! خصم بقيمة ₪${activeDiscount}`;
+            } else {
+                activeDiscount = 0;
+                msgEl.style.color = '#ff4d4d';
+                msgEl.innerText = '✕ كود الكوبون غير صحيح أو منتهي!';
+            }
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let itemsTotal = cart.reduce((sum, item) => sum + item.p, 0);
+            let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
+            
+            // خصم الكوبون بحيث لا يصبح المجموع أقل من صفر
+            let finalItemsTotal = Math.max(0, itemsTotal - activeDiscount);
+            let grandTotal = finalItemsTotal + deliveryFee;
+
+            document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
+            document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
+            
+            if(activeDiscount > 0) {
+                document.getElementById('summary-discount-price').innerText = '-₪' + activeDiscount;
+                document.getElementById('discount-row').style.display = 'flex';
+            } else {
+                document.getElementById('discount-row').style.display = 'none';
+            }
+
+            document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
+        }
+
+        function goToStep2() {
+            let clientName = document.getElementById('c-name').value;
+            let clientPhone = document.getElementById('c-phone').value;
+            let regionVal = document.getElementById('c-region').value;
+            let clientCity = document.getElementById('c-city').value;
+
+            if(!clientName || !clientPhone || regionVal === "0" || !clientCity) {
+                alert("الرجاء تعبئة كافة الحقول المطلوبة واختيار المنطقة والمدينة!");
+                return;
+            }
+
+            document.getElementById('step-1-content').style.display = 'none';
+            document.getElementById('step-2-content').style.display = 'block';
+            
+            document.getElementById('ind-1').classList.remove('active');
+            document.getElementById('ind-2').classList.add('active');
+
+            let allItemsText = cart.map(i => i.n).join(', ');
+            document.getElementById('summary-items-text').innerText = allItemsText;
+            updateTotal();
+        }
+
+        function goBackToStep1() {
+            document.getElementById('step-2-content').style.display = 'none';
+            document.getElementById('step-1-content').style.display = 'block';
+            
+            document.getElementById('ind-2').classList.remove('active');
+            document.getElementById('ind-1').classList.add('active');
+        }
+
+        function finishOrder() {
+            if(!document.getElementById('robot-check').checked) {
+                alert("الرجاء تحديد خانة (أنا لست روبوت) لتأكيد الطلب!");
+                return;
+            }
+
+            let clientName = document.getElementById('c-name').value;
+            let clientPhone = document.getElementById('c-phone').value;
+            let regionSelect = document.getElementById('c-region');
+            let regionText = regionSelect.options[regionSelect.selectedIndex].text;
+            let clientCity = document.getElementById('c-city').value;
+            
+            let itemsTotal = cart.reduce((sum, item) => sum + item.p, 0);
+            let deliveryFee = parseInt(regionSelect.value) || 0;
+            let finalItemsTotal = Math.max(0, itemsTotal - activeDiscount);
+            let grandTotal = finalItemsTotal + deliveryFee;
+            let itemsListStr = cart.map(i => i.n).join(', ');
+
+            let storedOrders = JSON.parse(localStorage.getItem('elite_orders')) || [];
+            storedOrders.push({
+                name: clientName,
+                phone: clientPhone,
+                region: regionText,
+                city: clientCity,
+                items: itemsListStr,
+                total: grandTotal
+            });
+            localStorage.setItem('elite_orders', JSON.stringify(storedOrders));
+
+            const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
+            let discordPayload = {
+                content: "🚨 **طلب جديد تم إستلامه في المتجر بنجاح!** 🚨\n\n" +
+                         `👤 **الاسم:** ${clientName}\n` +
+                         `📞 **الهاتف:** ${clientPhone}\n` +
+                         `📍 **المنطقة والمدينة:** ${regionText} - ${clientCity}\n` +
+                         `🛒 **المنتجات:** ${itemsListStr}\n` +
+                         (activeDiscount > 0 ? `🎟️ **الكوبون المستخدم:** خصم ₪${activeDiscount}\n` : '') +
+                         `💰 **المجموع الكلي:** ₪${grandTotal}`
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(discordPayload)
+            }).catch(networkError => console.log(networkError));
+
+            document.getElementById('step-2-content').style.display = 'none';
+            document.getElementById('step-3-content').style.display = 'block';
+
+            document.getElementById('ind-2').classList.remove('active');
+            document.getElementById('ind-3').classList.add('active');
+
+            document.getElementById('final-msg').innerText = `يا ${clientName}، تم تسجيل طلبك بنجاح بقيمة إجمالية ${grandTotal} ₪. سيتم التواصل معك هاتفياً قريباً على الرقم (${clientPhone}) لتأكيد موعد التوصيل بدقة!`;
+            
+            cart = [];
+            document.getElementById('count').innerText = 0;
+        }
+
+        renderStore();
+    </script>
+</body>
+</html>
