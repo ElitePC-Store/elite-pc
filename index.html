@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELITE PC - المتجر الرئيسي والاحترافي</title>
     
-    <!-- استدعاء خط كايرو من جوجل فونتس -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- استدعاء مكتبة الأيقونات الشهيرة Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- تنسيقات المتجر الرئيسية -->
     <style>
         /* تعريف المتغيرات الأساسية للألوان */
         :root { 
@@ -384,12 +381,10 @@
 </head>
 <body>
 
-    <!-- شريط التوصيل العلوي المتحرك -->
     <div class="delivery-bar">
         <div class="delivery-text">⚡ توصيل لجميع مناطق الضفة (20₪) والقدس (50₪) والداخل (70₪) ⚡ أداء بلا حدود مع ELITE PC ⚡</div>
     </div>
 
-    <!-- ترويسة الموقع الرئيسية -->
     <header>
         <div class="logo-container">
             <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="logo-main" class="logo-img" alt="Logo">
@@ -402,23 +397,19 @@
         </nav>
     </header>
 
-    <!-- قسم الهيرو الترحيبي -->
     <div class="hero" id="hero-bg">
         <img src="https://i.ibb.co/LzNfX6X/elite-logo.png" id="hero-logo" class="hero-logo-img" alt="Hero Logo">
         <h1>ELITE PC</h1>
         <p>احترافية الأداء وبلا تنازلات في عالم الألعاب</p>
     </div>
 
-    <!-- الأزرار العائمة للتواصل (واتساب وديسكورد) -->
     <div class="social-float">
         <a href="https://wa.me/972525995654" class="social-btn wa" target="_blank" aria-label="WhatsApp" title="تواصل عبر الواتساب"><i class="fab fa-whatsapp"></i></a>
         <a href="https://discord.gg/zFp9uXmjU" class="social-btn dc" target="_blank" aria-label="Discord" title="انضم لسيرفر الديسكورد"><i class="fab fa-discord"></i></a>
     </div>
 
-    <!-- عرض المنتجات المجلوبة ديناميكياً من لوحة التحكم -->
     <div id="shop-data"></div>
 
-    <!-- نافذة إتمام الطلب (Checkout Modal) -->
     <div id="checkout-modal">
         <div class="modal-content">
             <div class="steps-indicator">
@@ -427,7 +418,6 @@
                 <div class="step-circle" id="ind-3">3</div>
             </div>
 
-            <!-- خطوة 1: البيانات الشخصية ومنطقة التوصيل -->
             <div id="step-1-content">
                 <h2 style="color:var(--main-red); text-align:center; margin-top:0; font-weight:900;">بيانات التوصيل الشخصية</h2>
                 <div class="form-group">
@@ -454,7 +444,6 @@
                 <button onclick="goToStep2()" class="action-btn">التالي - مراجعة الطلب &larr;</button>
             </div>
 
-            <!-- خطوة 2: الدفع وملخص الطلب -->
             <div id="step-2-content" style="display:none;">
                 <h2 style="color:var(--main-red); text-align:center; margin-top:0; font-weight:900;">طريقة الدفع وملخص الطلب</h2>
                 <div class="payment-box">
@@ -462,11 +451,24 @@
                     <h3 style="margin:5px 0;">الدفع عند الاستلام</h3>
                     <p style="color:#888; font-size:13px; margin:0;">Cash on Delivery - ادفع نقداً عند استلام طلبك مباشرة</p>
                 </div>
+
+                <div class="form-group" style="background: #151515; padding: 15px; border-radius: 10px; border: 1px dashed var(--main-red);">
+                    <label style="color: #fff; margin-bottom: 5px;"><i class="fas fa-ticket-alt"></i> لديك كود خصم؟ (اختياري)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="coupon-input" class="form-control" placeholder="أدخل كود الكوبون هنا">
+                        <button type="button" onclick="applyCoupon()" class="action-btn" style="width: 130px; padding: 10px;">تطبيق</button>
+                    </div>
+                    <small id="coupon-msg" style="display: block; margin-top: 6px; font-weight: bold;"></small>
+                </div>
                 
                 <div class="order-summary-box">
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size: 14px;">
                         <span id="summary-items-text" style="color:#ccc;">المنتجات المختارة</span>
                         <span id="summary-items-price" style="font-weight: bold;">₪0</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size: 14px; color: #2ecc71;" id="discount-row" style="display:none;">
+                        <span>قيمة الخصم (الكوبون)</span>
+                        <span id="summary-discount-price" style="font-weight: bold;">-₪0</span>
                     </div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size: 14px;">
                         <span style="color:#ccc;">تكلفة التوصيل</span>
@@ -489,7 +491,6 @@
                 </div>
             </div>
 
-            <!-- خطوة 3: رسالة النجاح والإنهاء -->
             <div id="step-3-content" style="display:none; text-align:center; padding: 25px 0;">
                 <i class="fas fa-check-circle" style="font-size:80px; color:#25d366; margin-bottom: 15px;"></i>
                 <h2 style="font-weight: 900;">تم استلام طلبك يا وحش بنجاح!</h2>
@@ -499,14 +500,13 @@
         </div>
     </div>
 
-    <!-- نافذة منقذة للصور التالفة ومعالجة البيانات بلغة الجافاسكريبت -->
     <script>
-        // تحميل المنتجات والهوية من ذاكرة المتصفح المحلية
         let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
         let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
+        let coupons = JSON.parse(localStorage.getItem('elite_coupons')) || [];
         let cart = [];
+        let activeDiscount = 0; // قيمة الخصم النشطة
 
-        // تطبيق الهوية المخصصة لو تم حفظها من لوحة التحكم
         if(identity.logo) {
             document.getElementById('logo-main').src = identity.logo;
             document.getElementById('hero-logo').src = identity.logo;
@@ -517,7 +517,6 @@
             document.getElementById('hero-bg').style.backgroundPosition = 'center';
         }
 
-        // دالة عرض المنتجات وتصنيفاتها بالمتجر مع حماية الصور المنكسرة أو الروابط الطويلة
         function renderStore() {
             const categoriesList = [
                 {id:'KEYBOARDS', name:'كيبوردات الميكانيكال'}, 
@@ -551,129 +550,3 @@
             
             document.getElementById('shop-data').innerHTML = storeHTML;
         }
-
-        // دالة إضافة المنتج إلى سلة المشتريات
-        function addToCart(productName, productPrice) { 
-            cart.push({n: productName, p: productPrice}); 
-            document.getElementById('count').innerText = cart.length; 
-            alert("تمت إضافة المنتج إلى السلة بنجاح!");
-        }
-
-        // دالة فتح نافذة إتمام الطلب والتحقق من محتوى السلة
-        function openCheckout() {
-            if(cart.length === 0) {
-                alert("السلة فارغة حالياً! أضف بعض المنتجات لمتابعة الشراء.");
-                return;
-            }
-            document.getElementById('checkout-modal').style.display = 'block';
-        }
-
-        // دالة حساب الأسعار وتكلفة التوصيل الإجمالية بناءً على اختيار المنطقة
-        function updateTotal() {
-            let itemsTotal = cart.reduce((sum, item) => sum + item.p, 0);
-            let deliveryFee = parseInt(document.getElementById('c-region').value) || 0;
-            let grandTotal = itemsTotal + deliveryFee;
-
-            document.getElementById('summary-items-price').innerText = '₪' + itemsTotal;
-            document.getElementById('summary-delivery-price').innerText = '₪' + deliveryFee;
-            document.getElementById('summary-total-price').innerText = '₪' + grandTotal;
-        }
-
-        // الانتقال للخطوة الثانية من الطلب مع التحقق من الحقول
-        function goToStep2() {
-            let clientName = document.getElementById('c-name').value;
-            let clientPhone = document.getElementById('c-phone').value;
-            let regionVal = document.getElementById('c-region').value;
-            let clientCity = document.getElementById('c-city').value;
-
-            if(!clientName || !clientPhone || regionVal === "0" || !clientCity) {
-                alert("الرجاء تعبئة كافة الحقول المطلوبة واختيار المنطقة والمدينة!");
-                return;
-            }
-
-            document.getElementById('step-1-content').style.display = 'none';
-            document.getElementById('step-2-content').style.display = 'block';
-            
-            document.getElementById('ind-1').classList.remove('active');
-            document.getElementById('ind-2').classList.add('active');
-
-            let allItemsText = cart.map(i => i.n).join(', ');
-            document.getElementById('summary-items-text').innerText = allItemsText;
-            updateTotal();
-        }
-
-        // زر العودة من الخطوة الثانية للأولى
-        function goBackToStep1() {
-            document.getElementById('step-2-content').style.display = 'none';
-            document.getElementById('step-1-content').style.display = 'block';
-            
-            document.getElementById('ind-2').classList.remove('active');
-            document.getElementById('ind-1').classList.add('active');
-        }
-
-        // إنهاء الطلب، حفظه في لوحة التحكم وإرساله لـ Discord الويب هوك
-        function finishOrder() {
-            if(!document.getElementById('robot-check').checked) {
-                alert("الرجاء تحديد خانة (أنا لست روبوت) لتأكيد الطلب!");
-                return;
-            }
-
-            let clientName = document.getElementById('c-name').value;
-            let clientPhone = document.getElementById('c-phone').value;
-            let regionSelect = document.getElementById('c-region');
-            let regionText = regionSelect.options[regionSelect.selectedIndex].text;
-            let clientCity = document.getElementById('c-city').value;
-            
-            let itemsTotal = cart.reduce((sum, item) => sum + item.p, 0);
-            let deliveryFee = parseInt(regionSelect.value) || 0;
-            let grandTotal = itemsTotal + deliveryFee;
-            let itemsListStr = cart.map(i => i.n).join(', ');
-
-            // تخزين الطلب في الـ LocalStorage ليظهر في لوحة التحكم (admin.html)
-            let storedOrders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-            storedOrders.push({
-                name: clientName,
-                phone: clientPhone,
-                region: regionText,
-                city: clientCity,
-                items: itemsListStr,
-                total: grandTotal
-            });
-            localStorage.setItem('elite_orders', JSON.stringify(storedOrders));
-
-            // إرسال تنبيه الطلب الجديد إلى ويبهوك ديسكورد تلقائياً
-            const webhookURL = "https://discord.com/api/webhooks/1529479713091883128/lAxglrvSU5-kyEmlvptvEx6iUlIYU6s62ttsVTu5ItkUxscDa01ahQKd7XMNdW0oysYP";
-            let discordPayload = {
-                content: "🚨 **طلب جديد تم إستلامه في المتجر بنجاح!** 🚨\n\n" +
-                         `👤 **الاسم:** ${clientName}\n` +
-                         `📞 **الهاتف:** ${clientPhone}\n` +
-                         `📍 **المنطقة والمدينة:** ${regionText} - ${clientCity}\n` +
-                         `🛒 **المنتجات:** ${itemsListStr}\n` +
-                         `💰 **المجموع الكلي:** ₪${grandTotal}`
-            };
-
-            fetch(webhookURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(discordPayload)
-            }).catch(networkError => console.log(networkError));
-
-            // إظهار واجهة الخطوة الثالثة وتأكيد النجاح
-            document.getElementById('step-2-content').style.display = 'none';
-            document.getElementById('step-3-content').style.display = 'block';
-
-            document.getElementById('ind-2').classList.remove('active');
-            document.getElementById('ind-3').classList.add('active');
-
-            document.getElementById('final-msg').innerText = `يا ${clientName}، تم تسجيل طلبك بنجاح بقيمة إجمالية ${grandTotal} ₪. سيتم التواصل معك هاتفياً قريباً على الرقم (${clientPhone}) لتأكيد موعد التوصيل بدقة!`;
-            
-            // تفريغ السلة
-            cart = [];
-            document.getElementById('count').innerText = 0;
-        }
-
-        // تشغيل دالة بناء المتجر تلقائياً عند تحميل الصفحة
-        renderStore();
-    </script>
-</body>
-</html>
