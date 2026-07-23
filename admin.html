@@ -117,7 +117,12 @@
 
     <div class="admin-container">
         
-        <!-- قسم تعديل الهوية -->
+        <div class="admin-card" style="border: 2px dashed var(--main-red); background: #120a0a;">
+            <div class="admin-title" style="margin-bottom: 10px;"><i class="fas fa-sync-alt"></i> إبادة وترسيت التغييرات (Restart Cache)</div>
+            <p style="color: #aaa; font-size: 13px; margin-bottom: 15px;">كبس هذا الزر يقوم بعمل مزامنة تامة وإجبار المتصفح على تحديث كافة التغييرات والبيانات فوراً.</p>
+            <button onclick="resetSiteCache()" class="btn-action" style="background: linear-gradient(135deg, #ff4d4d, #cc0000);">ترسيت الموقع وتحديث التغييرات الآن ⚡</button>
+        </div>
+
         <div class="admin-card">
             <div class="admin-title"><i class="fas fa-palette"></i> تغير هوية المتجر (اللوجو والخلفية)</div>
             <div class="form-group">
@@ -129,7 +134,6 @@
             <button onclick="updateIdentity()" class="btn-action" style="background: #2ecc71;">تحديث الهوية الآن ✓</button>
         </div>
 
-        <!-- قسم إضافة منتج جديد -->
         <div class="admin-card">
             <div class="admin-title"><i class="fas fa-box"></i> إضافة منتج جديد</div>
             <div class="form-group">
@@ -159,7 +163,6 @@
             <button onclick="addProduct()" class="btn-action">نشر في المتجر</button>
         </div>
 
-        <!-- قسم إضافة كود كوبون جديد وحذفه -->
         <div class="admin-card" style="border-color: #2ecc71;">
             <div class="admin-title" style="color: #2ecc71; border-right-color: #2ecc71;"><i class="fas fa-ticket-alt"></i> إضافة وتعديل أكواد الكوبونات</div>
             <div class="form-group">
@@ -174,19 +177,16 @@
             </div>
         </div>
 
-        <!-- جدول الكوبونات النشطة -->
         <div class="admin-card">
             <div class="admin-title"><i class="fas fa-list-ul"></i> أكواد الكوبونات المتاحة حالياً</div>
             <div id="coupons-table-container"></div>
         </div>
 
-        <!-- جدول المنتجات الحالية -->
         <div class="admin-card">
             <div class="admin-title"><i class="fas fa-boxes"></i> المنتجات الحالية في المتجر</div>
             <div id="products-table-container"></div>
         </div>
 
-        <!-- سجل الطلبات (الفواتير) -->
         <div class="admin-card">
             <div class="admin-title"><i class="fas fa-file-invoice-dollar"></i> سجل الطلبات (الفواتير والمناطق)</div>
             <div id="orders-table-container"></div>
@@ -194,7 +194,6 @@
 
     </div>
 
-    <!-- جافاسكريبت لوحة التحكم وإدارة البيانات -->
     <script>
         let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
         let coupons = JSON.parse(localStorage.getItem('elite_coupons')) || [];
@@ -204,11 +203,20 @@
         document.getElementById('new-logo').value = identity.logo || '';
         document.getElementById('new-bg').value = identity.bg || '';
 
+        // دالة ترسيت وتحديث الموقع بالكامل
+        function resetSiteCache() {
+            if(confirm("هل أنت متأكد من رغبتك في ترسيت وتحديث الموقع بالكامل؟")) {
+                // إجبار المتصفح على مسح الذاكرة المؤقتة وإعادة التحميل القسري
+                location.reload(true);
+            }
+        }
+
         function updateIdentity() {
             identity.logo = document.getElementById('new-logo').value;
             identity.bg = document.getElementById('new-bg').value;
             localStorage.setItem('elite_identity', JSON.stringify(identity));
             alert("تم تحديث هوية المتجر بنجاح!");
+            location.reload();
         }
 
         function addProduct() {
@@ -238,10 +246,9 @@
                 return;
             }
 
-            // التأكد من عدم تكرار الكود
             let existingIndex = coupons.findIndex(c => c.code.toLowerCase() === code.toLowerCase());
             if(existingIndex >= 0) {
-                coupons[existingIndex].amount = amount; // تحديث القيمة إذا كان موجوداً
+                coupons[existingIndex].amount = amount;
                 alert("تم تحديث قيمة الكوبون الموجود مسبقاً بنجاح!");
             } else {
                 coupons.push({code, amount});
@@ -252,7 +259,6 @@
             location.reload();
         }
 
-        // دالة حذف الكوبون كتابةً من خانة الإدخال مباشرة
         function removeCouponDirect() {
             let code = document.getElementById('c-code').value.trim();
             if(!code) {
@@ -290,7 +296,6 @@
         }
 
         function renderTables() {
-            // جدول الكوبونات
             let couponsHTML = `<table><tr><th>الكود</th><th>قيمة الخصم</th><th>إجراء</th></tr>`;
             if(coupons.length > 0) {
                 coupons.forEach((c, idx) => {
@@ -302,7 +307,6 @@
             couponsHTML += `</table>`;
             document.getElementById('coupons-table-container').innerHTML = couponsHTML;
 
-            // جدول المنتجات
             let prodHTML = `<table><tr><th>المنتج</th><th>السعر</th><th>التصنيف</th><th>إجراء</th></tr>`;
             if(products.length > 0) {
                 products.forEach((p, idx) => {
@@ -314,7 +318,6 @@
             prodHTML += `</table>`;
             document.getElementById('products-table-container').innerHTML = prodHTML;
 
-            // جدول الطلبات
             let orderHTML = `<table><tr><th>الرقم</th><th>الزبون</th><th>الهاتف</th><th>المنطقة والمدينة</th><th>المنتجات</th><th>المجموع</th><th>إجراء</th></tr>`;
             if(orders.length > 0) {
                 orders.forEach((o, idx) => {
@@ -322,12 +325,3 @@
                 });
             } else {
                 orderHTML += `<tr><td colspan="7" style="color:#777;">لا توجد طلبات واردة حتى الآن.</td></tr>`;
-            }
-            orderHTML += `</table>`;
-            document.getElementById('orders-table-container').innerHTML = orderHTML;
-        }
-
-        renderTables();
-    </script>
-</body>
-</html>
