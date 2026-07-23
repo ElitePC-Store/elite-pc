@@ -3,175 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite PC | BM HIGHSTAFF - لوحة التحكم</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>Elite PC | BM HIGHFSTAFF - لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-red: #ff4d4d; }
-        body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .section-box { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
-        .title { color: var(--main-red); font-size: 20px; margin-bottom: 15px; border-right: 4px solid var(--main-red); padding-right: 10px; }
-        .form-control { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; font-family: 'Cairo', sans-serif; }
-        .btn { background: var(--main-red); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Cairo', sans-serif; font-size: 16px; transition: 0.2s; }
-        .btn:hover { opacity: 0.9; }
-        .btn-green { background: #2ecc71; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #111; text-align: center; }
-        th, td { padding: 12px; border-bottom: 1px solid #222; font-size: 14px; }
-        th { color: var(--main-red); }
-        .delete-btn { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-family: 'Cairo', sans-serif; }
+        :root { 
+            --main-red: #ff4d4d; 
+            --main-red-dark: #cc0000;
+            --bg-dark: #0a0a0a;
+            --card-bg: #111;
+            --border-color: #222;
+        }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: var(--bg-dark); 
+            color: white; 
+            margin: 0; 
+            padding: 20px; 
+            direction: rtl; 
+        }
+        .admin-container { 
+            max-width: 850px; 
+            margin: 0 auto; 
+        }
+        .admin-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            border-radius: 14px; 
+            padding: 25px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .admin-title { 
+            color: var(--main-red); 
+            font-size: 20px; 
+            font-weight: 900; 
+            margin-bottom: 20px; 
+            border-right: 4px solid var(--main-red); 
+            padding-right: 10px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        .form-control { 
+            width: 100%; 
+            padding: 12px; 
+            background: #181818; 
+            border: 1px solid #333; 
+            color: white; 
+            border-radius: 8px; 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: var(--main-red);
+            outline: none;
+        }
+        .btn-action { 
+            background: var(--main-red); 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .btn-action:hover { 
+            background: var(--main-red-dark); 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            background: #141414; 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        th, td { 
+            padding: 12px; 
+            text-align: center; 
+            border-bottom: 1px solid #222; 
+            font-size: 14px; 
+        }
+        th { 
+            background: #1a1a1a; 
+            color: var(--main-red); 
+            font-weight: 700; 
+        }
+        .delete-btn { 
+            background: #333; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-family: 'Cairo', sans-serif; 
+            font-size: 12px; 
+        }
+        .delete-btn:hover { 
+            background: #c0392b; 
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    
-    <div class="section-box">
-        <div class="title">🎯 تغيير هوية المتجر (اللوجو والخلفية)</div>
-        <input type="text" id="admin-logo" class="form-control" placeholder="رابط اللوجو الجديد">
-        <input type="text" id="admin-bg" class="form-control" placeholder="رابط صورة خلفية الهيرو الجديدة">
-        <button onclick="updateIdentity()" class="btn btn-green">تحديث الهوية الآن ✓</button>
-    </div>
-
-    <div class="section-box">
-        <div class="title">📦 إضافة منتج جديد</div>
-        <input type="text" id="p-name" class="form-control" placeholder="اسم المنتج">
-        <input type="number" id="p-price" class="form-control" placeholder="السعر (بالشيكل)">
-        <input type="text" id="p-img" class="form-control" placeholder="رابط الصورة">
+    <div class="admin-container">
         
-        <select id="p-cat" class="form-control">
-            <option value="KEYBOARDS">كيبوردات</option>
-            <option value="MICE">ماوسات</option>
-            <option value="MOUSEPADS">ماوس باد</option>
-        </select>
+        <div class="admin-card">
+            <div class="admin-title"><i class="fas fa-palette"></i> تغير هوية المتجر (اللوجو والخلفية)</div>
+            <div class="form-group">
+                <input type="text" id="new-logo" class="form-control" placeholder="رابط اللوجو الجديد">
+            </div>
+            <div class="form-group">
+                <input type="text" id="new-bg" class="form-control" placeholder="رابط خلفية الهيرو الجديدة">
+            </div>
+            <button onclick="updateIdentity()" class="btn-action" style="background: #2ecc71;">تحديث الهوية الآن ✓</button>
+        </div>
 
-        <select id="p-badge" class="form-control">
-            <option value="">بدون ملصق</option>
-            <option value="جديد ✨">جديد ✨</option>
-            <option value="خصم 🔥">خصم 🔥</option>
-        </select>
+        <div class="admin-card">
+            <div class="admin-title"><i class="fas fa-box"></i> إضافة منتج جديد</div>
+            <div class="form-group">
+                <input type="text" id="p-name" class="form-control" placeholder="اسم المنتج">
+            </div>
+            <div class="form-group">
+                <input type="number" id="p-price" class="form-control" placeholder="السعر (بالشيكل)">
+            </div>
+            <div class="form-group">
+                <input type="text" id="p-img" class="form-control" placeholder="رابط الصورة">
+            </div>
+            <div class="form-group">
+                <select id="p-cat" class="form-control">
+                    <option value="KEYBOARDS">كيبوردات الميكانيكال</option>
+                    <option value="MICE">الماوسات الاحترافية</option>
+                    <option value="MOUSEPADS">ماوس باد الألعاب</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="p-badge" class="form-control">
+                    <option value="">بدون ملصق</option>
+                    <option value="جديد ✨">جديد ✨</option>
+                    <option value="خصم 🔥">خصم 🔥</option>
+                    <option value="حصري 👑">حصري 👑</option>
+                </select>
+            </div>
+            <button onclick="addProduct()" class="btn-action">نشر في المتجر</button>
+        </div>
 
-        <button onclick="addProduct()" class="btn">نشر في المتجر</button>
+        <div class="admin-card" style="border-color: #2ecc71;">
+            <div class="admin-title" style="color: #2ecc71; border-right-color: #2ecc71;"><i class="fas fa-ticket-alt"></i> إضافة كود كوبون خصم جديد</div>
+            <div class="form-group">
+                <input type="text" id="c-code" class="form-control" placeholder="اسم الكود (مثال: ELITE2026 أوSAVE10)">
+            </div>
+            <div class="form-group">
+                <input type="number" id="c-amount" class="form-control" placeholder="قيمة الخصم بالمبلغ (بالشيكل)">
+            </div>
+            <button onclick="addCoupon()" class="btn-action" style="background: #2ecc71;">نشر الكوبون وتفعيله في المتجر</button>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-title"><i class="fas fa-list-ul"></i> أكواد الكوبونات المتاحة حالياً</div>
+            <div id="coupons-table-container"></div>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-title"><i class="fas fa-boxes"></i> المنتجات الحالية في المتجر</div>
+            <div id="products-table-container"></div>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-title"><i class="fas fa-file-invoice-dollar"></i> سجل الطلبات (الفواتير والمناطق)</div>
+            <div id="orders-table-container"></div>
+        </div>
+
     </div>
 
-    <div class="section-box">
-        <div class="title">⚙️ المنتجات الحالية في المتجر</div>
-        <div id="products-list-admin"></div>
-    </div>
-
-    <div class="section-box">
-        <div class="title">🛒 سجل الطلبات (الفواتير والمناطق)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>الرقم</th>
-                    <th>الزبون</th>
-                    <th>الهاتف</th>
-                    <th>المنطقة والمدينة</th>
-                    <th>المنتجات</th>
-                    <th>المجموع</th>
-                    <th>إجراء</th>
-                </tr>
-            </thead>
-            <tbody id="orders-table-body">
-                <tr><td colspan="7" style="color:grey;">لا توجد طلبات حتى الآن.</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-</div>
-
-<script>
-    function updateIdentity() {
-        let logo = document.getElementById('admin-logo').value;
-        let bg = document.getElementById('admin-bg').value;
-        let identity = {logo: logo, bg: bg};
-        localStorage.setItem('elite_identity', JSON.stringify(identity));
-        alert("تم تحديث الهوية بنجاح!");
-    }
-
-    function addProduct() {
-        let name = document.getElementById('p-name').value;
-        let price = parseFloat(document.getElementById('p-price').value);
-        let img = document.getElementById('p-img').value;
-        let cat = document.getElementById('p-cat').value;
-        let badge = document.getElementById('p-badge').value;
-
-        if(!name || !price || !img) {
-            alert("الرجاء تعبئة جميع بيانات المنتج!");
-            return;
-        }
-
+    <script>
         let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
-        products.push({name, price, img, cat, badge});
-        localStorage.setItem('elite_v8', JSON.stringify(products));
-
-        alert("تمت إضافة المنتج ونشره في المتجر بنجاح!");
-        document.getElementById('p-name').value = '';
-        document.getElementById('p-price').value = '';
-        document.getElementById('p-img').value = '';
-        renderAdminProducts();
-    }
-
-    function deleteProduct(index) {
-        let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
-        products.splice(index, 1);
-        localStorage.setItem('elite_v8', JSON.stringify(products));
-        renderAdminProducts();
-    }
-
-    function renderAdminProducts() {
-        let products = JSON.parse(localStorage.getItem('elite_v8')) || [];
-        let html = '';
-        if(products.length === 0) {
-            html = '<p style="color:grey; text-align:center;">لا توجد منتجات مضافة.</p>';
-        } else {
-            html = `<table><thead><tr><th>الاسم</th><th>السعر</th><th>القسم</th><th>إجراء</th></tr></thead><tbody>`;
-            products.forEach((p, index) => {
-                html += `<tr>
-                    <td>${p.name}</td>
-                    <td>₪${p.price}</td>
-                    <td>${p.cat}</td>
-                    <td><button class="delete-btn" onclick="deleteProduct(${index})">حذف</button></td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-        }
-        document.getElementById('products-list-admin').innerHTML = html;
-    }
-
-    function renderOrders() {
+        let coupons = JSON.parse(localStorage.getItem('elite_coupons')) || [];
         let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-        let tbody = document.getElementById('orders-table-body');
-        if(orders.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="color:grey;">لا توجد طلبات حتى الآن.</td></tr>';
-            return;
+        let identity = JSON.parse(localStorage.getItem('elite_identity')) || {logo: '', bg: ''};
+
+        document.getElementById('new-logo').value = identity.logo || '';
+        document.getElementById('new-bg').value = identity.bg || '';
+
+        function updateIdentity() {
+            identity.logo = document.getElementById('new-logo').value;
+            identity.bg = document.getElementById('new-bg').value;
+            localStorage.setItem('elite_identity', JSON.stringify(identity));
+            alert("تم تحديث هوية المتجر بنجاح!");
         }
-        let html = '';
-        orders.forEach((o, i) => {
-            html += `<tr>
-                <td>#${i+1}</td>
-                <td>${o.name}</td>
-                <td>${o.phone}</td>
-                <td>${o.region} - ${o.city}</td>
-                <td>${o.items}</td>
-                <td style="color:var(--main-red); font-weight:bold;">₪${o.total}</td>
-                <td><button class="delete-btn" onclick="deleteOrder(${i})">مسح</button></td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
-    }
 
-    function deleteOrder(index) {
-        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [];
-        orders.splice(index, 1);
-        localStorage.setItem('elite_orders', JSON.stringify(orders));
-        renderOrders();
-    }
+        function addProduct() {
+            let name = document.getElementById('p-name').value;
+            let price = parseFloat(document.getElementById('p-price').value);
+            let img = document.getElementById('p-img').value;
+            let cat = document.getElementById('p-cat').value;
+            let badge = document.getElementById('p-badge').value;
 
-    renderAdminProducts();
-    renderOrders();
-</script>
+            if(!name || !price || !img) {
+                alert("الرجاء تعبئة اسم المنتج، السعر، ورابط الصورة!");
+                return;
+            }
+
+            products.push({name, price, img, cat, badge});
+            localStorage.setItem('elite_v8', JSON.stringify(products));
+            alert("تمت إضافة المنتج ونشره في المتجر بنجاح!");
+            location.reload();
+        }
+
+        // دالة إضافة كوبون جديد
+        function addCoupon() {
+            let code = document.getElementById('c-code').value.trim();
+            let amount = parseFloat(document.getElementById('c-amount').value);
+
+            if(!code || isNaN(amount) || amount <= 0) {
+                alert("الرجاء إدخال اسم الكود وقيمة الخصم الصحيحة!");
+                return;
+            }
+
+            coupons.push({code, amount});
+            localStorage.setItem('elite_coupons', JSON.stringify(coupons));
+            alert("تم إضافة وتفعيل كود الكوبون بنجاح!");
+            location.reload();
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem('elite_v8', JSON.stringify(products));
+            renderTables();
+        }
+
+        function deleteCoupon(index) {
+            coupons.splice(index, 1);
+            localStorage.setItem('elite_coupons', JSON.stringify(coupons));
+            renderTables();
+        }
+
+        function deleteOrder(index) {
+            orders.splice(index, 1);
+            localStorage.setItem('elite_orders', JSON.stringify(orders));
+            renderTables();
+        }
+
+        function renderTables() {
+            // جدول الكوبونات
+            let couponsHTML = `<table><tr><th>الكود</th><th>قيمة الخصم</th><th>إجراء</th></tr>`;
+            if(coupons.length > 0) {
+                coupons.forEach((c, idx) => {
+                    couponsHTML += `<tr><td><b>${c.code}</b></td><td style="color:#2ecc71;">₪${c.amount}</td><td><button class="delete-btn" onclick="deleteCoupon(${idx})">مسح</button></td></tr>`;
+                });
+            } else {
+                couponsHTML += `<tr><td colspan="3" style="color:#777;">لا توجد أكواد كوبونات مفعلة حالياً.</td></tr>`;
+            }
+            couponsHTML += `</table>`;
+            document.getElementById('coupons-table-container').innerHTML = couponsHTML;
+
+            // جدول المنتجات
+            let prodHTML = `<table><tr><th>المنتج</th><th>السعر</th><th>التصنيف</th><th>إجراء</th></tr>`;
+            if(products.length > 0) {
+                products.forEach((p, idx) => {
+                    prodHTML += `<tr><td>${p.name}</td><td>₪${p.price}</td><td>${p.cat}</td><td><button class="delete-btn" onclick="deleteProduct(${idx})">مسح</button></td></tr>`;
+                });
+            } else {
+                prodHTML += `<tr><td colspan="4" style="color:#777;">لا توجد منتجات مضافة حالياً.</td></tr>`;
+            }
+            prodHTML += `</table>`;
+            document.getElementById('products-table-container').innerHTML = prodHTML;
+
+            // جدول الطلبات
+            let orderHTML = `<table><tr><th>الرقم</th><th>الزبون</th><th>الهاتف</th><th>المنطقة والمدينة</th><th>المنتجات</th><th>المجموع</th><th>إجراء</th></tr>`;
+            if(orders.length > 0) {
+                orders.forEach((o, idx) => {
+                    orderHTML += `<tr><td>#${idx+1}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.region} - ${o.city}</td><td>${o.items}</td><td style="color:var(--main-red); font-weight:bold;">₪${o.total}</td><td><button class="delete-btn" onclick="deleteOrder(${idx})">مسح</button></td></tr>`;
+                });
+            } else {
+                orderHTML += `<tr><td colspan="7" style="color:#777;">لا توجد طلبات واردة حتى الآن.</td></tr>`;
+            }
+            orderHTML += `</table>`;
+            document.getElementById('orders-table-container').innerHTML = orderHTML;
+        }
+
+        renderTables();
+    </script>
 </body>
 </html>
